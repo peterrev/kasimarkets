@@ -492,242 +492,311 @@ button{cursor:pointer;font-family:inherit;}
 </div>
 
 <!-- ═══════════════════════════════════════════════
-     INTRO ANIMATION — cinematic concept walkthrough
+     INTRO — cinematic white concept walkthrough
      ═══════════════════════════════════════════════ -->
 <style>
-/* Intro overlay */
-.intro{position:fixed;inset:0;z-index:10000;background:#0a0a0a;display:flex;align-items:center;justify-content:center;transition:opacity .8s ease,visibility .8s;}
-.intro.done{opacity:0;visibility:hidden;pointer-events:none;}
-.intro-content{text-align:center;max-width:700px;padding:0 32px;position:relative;}
+/* Overlay */
+.cin{position:fixed;inset:0;z-index:10000;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .9s cubic-bezier(.4,0,.2,1),visibility .9s;}
+.cin.done{opacity:0;visibility:hidden;pointer-events:none;}
 
-/* Progress bar */
-.intro-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#16a34a,#4ade80);z-index:10001;width:0;transition:width .6s ease;}
+/* Progress */
+.cin-bar{position:fixed;top:0;left:0;height:3px;z-index:10002;background:linear-gradient(90deg,#16a34a,#4ade80);width:0;transition:width .5s cubic-bezier(.4,0,.2,1);}
 
-/* Skip button */
-.intro-skip{position:fixed;bottom:40px;right:40px;z-index:10001;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#888;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;backdrop-filter:blur(8px);}
-.intro-skip:hover{background:rgba(255,255,255,.14);color:#ccc;}
+/* Skip */
+.cin-skip{position:fixed;bottom:36px;right:36px;z-index:10002;background:rgba(0,0,0,.04);border:1px solid #e5e7eb;color:#9ca3af;padding:9px 20px;border-radius:100px;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;}
+.cin-skip:hover{background:rgba(0,0,0,.08);color:#111;}
 
-/* Slide base */
-.intro-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;pointer-events:none;}
-.intro-slide.active{opacity:1;transform:translateY(0);pointer-events:auto;}
-.intro-slide.exit{opacity:0;transform:translateY(-30px);}
+/* Green energy particles */
+.cin-dots{position:fixed;inset:0;z-index:10000;pointer-events:none;overflow:hidden;}
+.cin-dot{position:absolute;border-radius:50%;opacity:0;}
+@keyframes dotUp{0%{opacity:0;transform:translateY(0) scale(0);}15%{opacity:.5;}100%{opacity:0;transform:translateY(-260px) scale(1.2);}}
+@keyframes dotDrift{0%{opacity:0;transform:translate(0,0) scale(0);}20%{opacity:.35;}100%{opacity:0;transform:translate(40px,-180px) scale(1);}}
 
-/* Slide elements */
-.intro-icon{width:72px;height:72px;border-radius:18px;display:grid;place-items:center;font-size:34px;margin:0 auto 28px;position:relative;}
-.intro-icon::after{content:'';position:absolute;inset:-8px;border-radius:22px;background:inherit;opacity:.15;filter:blur(12px);}
-.intro-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-bottom:14px;}
-.intro-heading{font-size:42px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.03em;margin-bottom:16px;}
-.intro-body{font-size:17px;color:#9ca3af;line-height:1.6;max-width:520px;margin:0 auto;}
+/* Slides */
+.cin-wrap{position:relative;width:100%;max-width:720px;padding:0 28px;text-align:center;}
+.cin-s{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;will-change:opacity,transform;}
 
-/* Mini share card in slide */
-.intro-card{background:linear-gradient(145deg,#0d1117,#111827);border:1px solid #1e293b;border-radius:12px;padding:20px;max-width:320px;margin:24px auto 0;text-align:left;position:relative;overflow:hidden;}
-.intro-card::before{content:'';position:absolute;top:0;right:0;width:50px;height:50px;background:radial-gradient(circle at top right,rgba(74,222,128,.1),transparent);}
-.intro-card-logo{display:flex;align-items:center;gap:6px;font-size:11px;color:#666;margin-bottom:8px;}
-.intro-card-logo span{width:16px;height:16px;background:#fff;border-radius:4px;display:grid;place-items:center;color:#000;font-size:8px;font-weight:800;}
-.intro-card-q{font-size:13px;font-weight:600;color:#fff;margin-bottom:8px;}
-.intro-card-pos{background:#16a34a;color:#fff;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;}
-.intro-card-pay{font-size:12px;color:#777;margin-top:6px;}
-.intro-card-pay strong{color:#4ade80;}
+/* Transitions */
+.cin-s.enter{animation:slideIn .65s cubic-bezier(.22,1,.36,1) forwards;}
+.cin-s.exit{animation:slideOut .5s cubic-bezier(.55,0,1,.45) forwards;}
+@keyframes slideIn{from{opacity:0;transform:scale(.92) translateY(24px);}to{opacity:1;transform:scale(1) translateY(0);}}
+@keyframes slideOut{from{opacity:1;transform:scale(1) translateY(0);}to{opacity:0;transform:scale(1.04) translateY(-20px);}}
 
-/* Particles */
-.intro-particles{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden;}
-.intro-particle{position:absolute;width:4px;height:4px;border-radius:50%;background:#16a34a;opacity:0;animation:particleFloat 4s ease-out infinite;}
-@keyframes particleFloat{
-  0%{opacity:0;transform:translateY(0) scale(0);}
-  20%{opacity:.4;}
-  100%{opacity:0;transform:translateY(-200px) scale(1);}
+/* ── Slide 0: Logo burst ── */
+.cin-logo{width:100px;height:100px;background:#111;border-radius:22px;display:grid;place-items:center;color:#fff;font-size:52px;font-weight:900;margin:0 auto 0;position:relative;box-shadow:0 0 0 0 rgba(22,163,74,.3);}
+.cin-logo.pulse{animation:logoBurst 1.8s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes logoBurst{
+  0%{transform:scale(0);opacity:0;box-shadow:0 0 0 0 rgba(22,163,74,.4);}
+  40%{transform:scale(1.1);opacity:1;box-shadow:0 0 0 30px rgba(22,163,74,.08);}
+  60%{transform:scale(.97);}
+  80%{transform:scale(1.02);box-shadow:0 0 60px 10px rgba(22,163,74,.06);}
+  100%{transform:scale(1);box-shadow:0 4px 40px rgba(0,0,0,.08);}
 }
+.cin-brand{font-size:38px;font-weight:900;color:#111;letter-spacing:-.03em;margin-top:24px;opacity:0;}
+.cin-brand.show{animation:brandIn .6s .3s cubic-bezier(.22,1,.36,1) forwards;}
+@keyframes brandIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.cin-tagline{font-size:14px;color:#9ca3af;font-weight:500;margin-top:8px;opacity:0;}
+.cin-tagline.show{animation:brandIn .5s .6s cubic-bezier(.22,1,.36,1) forwards;}
 
-/* Logo entrance */
-.intro-logo-big{width:80px;height:80px;background:#fff;border-radius:20px;display:grid;place-items:center;color:#0a0a0a;font-size:40px;font-weight:900;margin:0 auto 32px;box-shadow:0 0 0 0 rgba(255,255,255,.2);animation:logoPulse 2s ease-in-out infinite;}
-@keyframes logoPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.15);}50%{box-shadow:0 0 0 20px rgba(255,255,255,0);}}
+/* ── Slide 1: Insight ── */
+.cin-h{font-size:44px;font-weight:900;color:#111;line-height:1.08;letter-spacing:-.035em;margin-bottom:16px;}
+.cin-sub{font-size:17px;color:#6b7280;line-height:1.6;max-width:500px;margin:0 auto;}
+.cin-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px;}
+.cin-tag{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;border:1px solid #e5e7eb;color:#374151;background:#fff;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s;}
+.cin-tag.pop{opacity:1;transform:translateY(0);}
 
-/* Platform icons row */
-.intro-platforms{display:flex;justify-content:center;gap:12px;margin-top:20px;}
-.intro-plat{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:18px;font-weight:700;opacity:0;transform:scale(.7);transition:opacity .4s,transform .4s;}
-.intro-plat.show{opacity:1;transform:scale(1);}
+/* ── Slide 2: Product — market card ── */
+.cin-mcard{background:#fff;border:2px solid #e5e7eb;border-radius:16px;padding:24px;max-width:380px;margin:24px auto 0;text-align:left;box-shadow:0 8px 40px rgba(0,0,0,.06);}
+.cin-mcard-top{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.cin-mcard-logo{width:28px;height:28px;background:#111;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:14px;font-weight:800;}
+.cin-mcard-site{font-size:12px;color:#9ca3af;font-weight:500;}
+.cin-mcard-q{font-size:16px;font-weight:700;color:#111;line-height:1.3;margin-bottom:16px;}
+.cin-mcard-btns{display:flex;gap:8px;}
+.cin-mcard-btn{flex:1;padding:12px;border-radius:10px;text-align:center;font-weight:700;font-size:14px;border:none;cursor:default;}
+.cin-mcard-yes{background:#dcfce7;color:#16a34a;}
+.cin-mcard-no{background:#fee2e2;color:#dc2626;}
+.cin-mcard-price{font-size:13px;color:#9ca3af;text-align:center;margin-top:12px;}
+.cin-mcard-price b{color:#16a34a;}
+/* Price tick animation */
+.cin-mcard-btn.tick{animation:priceTick .3s ease;}
+@keyframes priceTick{0%{transform:scale(1);}50%{transform:scale(1.06);}100%{transform:scale(1);}}
 
-/* Receipt mock */
-.intro-receipt{background:linear-gradient(145deg,#0d1117,#111827);border:1px solid #1e293b;border-radius:12px;padding:20px;max-width:300px;margin:20px auto 0;text-align:center;}
-.intro-receipt-check{width:48px;height:48px;border-radius:50%;background:rgba(22,163,74,.15);display:grid;place-items:center;margin:0 auto 12px;font-size:24px;}
-.intro-receipt-amount{font-size:28px;font-weight:900;color:#4ade80;margin-bottom:4px;}
-.intro-receipt-label{font-size:12px;color:#666;}
+/* ── Slide 3: Flywheel ── */
+.cin-flow{display:flex;align-items:center;justify-content:center;gap:0;margin:28px auto 0;max-width:600px;flex-wrap:wrap;}
+.cin-flow-step{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:110px;opacity:0;transform:translateX(-10px);}
+.cin-flow-step.show{opacity:1;transform:translateX(0);transition:opacity .4s,transform .4s;}
+.cin-flow-icon{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:22px;}
+.cin-flow-label{font-size:12px;font-weight:700;color:#111;}
+.cin-flow-arrow{font-size:20px;color:#d1d5db;padding:0 4px;opacity:0;}
+.cin-flow-arrow.show{opacity:1;transition:opacity .3s;}
+
+/* Share card flies */
+.cin-flycard{position:absolute;width:200px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,.1);opacity:0;pointer-events:none;text-align:left;font-size:11px;z-index:2;}
+.cin-flycard.fly{animation:cardFly 1.2s cubic-bezier(.22,1,.36,1) forwards;}
+@keyframes cardFly{0%{opacity:0;transform:translate(0,0) scale(.8) rotate(-2deg);}30%{opacity:1;transform:translate(30px,-20px) scale(1) rotate(0deg);}70%{opacity:1;transform:translate(60px,-60px) scale(.95) rotate(1deg);}100%{opacity:0;transform:translate(120px,-100px) scale(.85) rotate(2deg);}}
+
+/* ── Slide 4: Payoff ── */
+.cin-payout{margin:24px auto 0;text-align:center;}
+.cin-check{width:64px;height:64px;border-radius:50%;background:#dcfce7;display:grid;place-items:center;margin:0 auto 16px;font-size:28px;color:#16a34a;transform:scale(0);}
+.cin-check.pop{animation:checkPop .5s cubic-bezier(.22,1,.36,1) forwards;}
+@keyframes checkPop{from{transform:scale(0) rotate(-20deg);}to{transform:scale(1) rotate(0deg);}}
+.cin-amount{font-size:42px;font-weight:900;color:#16a34a;letter-spacing:-.02em;opacity:0;transform:translateY(10px);}
+.cin-amount.show{animation:brandIn .5s .2s cubic-bezier(.22,1,.36,1) forwards;}
+.cin-paylabel{font-size:13px;color:#9ca3af;margin-top:4px;opacity:0;}
+.cin-paylabel.show{animation:brandIn .4s .4s cubic-bezier(.22,1,.36,1) forwards;}
+
+/* ── Slide 5: CTA ── */
+.cin-cta-btn{display:inline-flex;align-items:center;gap:10px;background:#111;color:#fff;padding:18px 36px;border-radius:14px;font-size:17px;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:'Inter',sans-serif;}
+.cin-cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.15);}
 
 @media(max-width:600px){
-  .intro-heading{font-size:28px;}
-  .intro-body{font-size:15px;}
-  .intro-skip{bottom:24px;right:24px;}
+  .cin-h{font-size:30px;}
+  .cin-sub{font-size:15px;}
+  .cin-logo{width:76px;height:76px;font-size:40px;border-radius:18px;}
+  .cin-brand{font-size:28px;}
+  .cin-mcard{max-width:320px;padding:18px;}
+  .cin-flow{gap:4px;}
+  .cin-flow-step{min-width:80px;}
+  .cin-amount{font-size:32px;}
+  .cin-skip{bottom:20px;right:20px;}
 }
 </style>
 
 <!-- Intro overlay -->
-<div class="intro" id="intro">
-  <div class="intro-progress" id="introProgress"></div>
-  <div class="intro-particles" id="introParticles"></div>
+<div class="cin" id="cin">
+  <div class="cin-bar" id="cinBar"></div>
+  <div class="cin-dots" id="cinDots"></div>
 
-  <div class="intro-content">
-    <!-- Slide 0: Logo -->
-    <div class="intro-slide" id="s0">
-      <div class="intro-logo-big">K</div>
-      <div class="intro-label" style="color:#4ade80;">Introducing</div>
-      <div class="intro-heading">Kasi Markets</div>
-      <div class="intro-body">Africa's first regulated prediction market</div>
+  <div class="cin-wrap">
+    <!-- 0: Logo burst -->
+    <div class="cin-s" id="cs0">
+      <div class="cin-logo" id="cinLogo">K</div>
+      <div class="cin-brand" id="cinBrand">Kasi Markets</div>
+      <div class="cin-tagline" id="cinTag">Africa's first regulated prediction market</div>
     </div>
 
-    <!-- Slide 1: The problem/insight -->
-    <div class="intro-slide" id="s1">
-      <div class="intro-icon" style="background:rgba(74,222,128,.12);">&#128172;</div>
-      <div class="intro-label" style="color:#4ade80;">The insight</div>
-      <div class="intro-heading">Everyone has an opinion</div>
-      <div class="intro-body">Every day, millions of people debate elections, sport, the rand, load-shedding, and culture. Strong opinions. Loud arguments. Bold predictions. But until now — just talk.</div>
-    </div>
-
-    <!-- Slide 2: The product -->
-    <div class="intro-slide" id="s2">
-      <div class="intro-icon" style="background:rgba(37,99,235,.12);">&#128200;</div>
-      <div class="intro-label" style="color:#60a5fa;">The product</div>
-      <div class="intro-heading">Now you can bet on it</div>
-      <div class="intro-body">Pick a question. Take YES or NO. Bet from R5. Prices move in real time based on what the crowd actually believes — not what bookmakers decide.</div>
-      <div class="intro-card">
-        <div class="intro-card-logo"><span>K</span> kasi.markets</div>
-        <div class="intro-card-q">Will the ANC poll under 40% nationally?</div>
-        <div class="intro-card-pos">YES &middot; 57&#162;</div>
-        <div class="intro-card-pay">Potential payout: <strong>R 175.44</strong></div>
+    <!-- 1: Insight -->
+    <div class="cin-s" id="cs1">
+      <div class="cin-h">Everyone has an opinion.<br/>Every day is a debate.</div>
+      <div class="cin-sub">Strong opinions. Loud arguments. Bold predictions.</div>
+      <div class="cin-tags" id="cinTags">
+        <span class="cin-tag">Elections</span>
+        <span class="cin-tag">Sport</span>
+        <span class="cin-tag">The Rand</span>
+        <span class="cin-tag">Load-shedding</span>
+        <span class="cin-tag">Culture</span>
+        <span class="cin-tag">Eskom</span>
+        <span class="cin-tag">PSL</span>
       </div>
     </div>
 
-    <!-- Slide 3: Share everywhere -->
-    <div class="intro-slide" id="s3">
-      <div class="intro-icon" style="background:rgba(168,85,247,.12);">&#128640;</div>
-      <div class="intro-label" style="color:#c084fc;">Share & spread</div>
-      <div class="intro-heading">Share your call everywhere</div>
-      <div class="intro-body">Every bet creates a beautiful shareable card. Post it to X, drop it in WhatsApp groups, share your story on Instagram, or make a TikTok. Spark the debate.</div>
-      <div class="intro-platforms" id="introPlatforms">
-        <div class="intro-plat" style="background:#000;color:#fff;">&#120143;</div>
-        <div class="intro-plat" style="background:#25D366;color:#fff;">&#9993;</div>
-        <div class="intro-plat" style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);color:#fff;">&#9829;</div>
-        <div class="intro-plat" style="background:#010101;color:#fff;border:1px solid #333;">&#9835;</div>
+    <!-- 2: Product -->
+    <div class="cin-s" id="cs2">
+      <div class="cin-h">Now you can bet on it</div>
+      <div class="cin-sub">From just R5. Prices move in real time.</div>
+      <div class="cin-mcard" id="cinCard">
+        <div class="cin-mcard-top">
+          <div class="cin-mcard-logo">K</div>
+          <div class="cin-mcard-site">kasi.markets</div>
+        </div>
+        <div class="cin-mcard-q">Will the ANC poll under 40% nationally in LGE 2026?</div>
+        <div class="cin-mcard-btns">
+          <div class="cin-mcard-btn cin-mcard-yes" id="cinYes">Yes 57&#162;</div>
+          <div class="cin-mcard-btn cin-mcard-no" id="cinNo">No 43&#162;</div>
+        </div>
+        <div class="cin-mcard-price">Potential payout: <b>R 175.44</b></div>
       </div>
     </div>
 
-    <!-- Slide 4: Get paid -->
-    <div class="intro-slide" id="s4">
-      <div class="intro-icon" style="background:rgba(22,163,74,.12);">&#128176;</div>
-      <div class="intro-label" style="color:#4ade80;">The payoff</div>
-      <div class="intro-heading">Get paid when you're right</div>
-      <div class="intro-body">When the outcome lands, winners cash out instantly via PayShap, Capitec, or MoMo. Come back and claim your receipts publicly.</div>
-      <div class="intro-receipt">
-        <div class="intro-receipt-check">&#10003;</div>
-        <div class="intro-receipt-amount">+ R 175.44</div>
-        <div class="intro-receipt-label">Paid out instantly via PayShap</div>
+    <!-- 3: Flywheel -->
+    <div class="cin-s" id="cs3">
+      <div class="cin-h">Share. Debate. Grow.</div>
+      <div class="cin-sub">Every bet creates a shareable card. Every share sparks a debate.</div>
+      <div class="cin-flow" id="cinFlow">
+        <div class="cin-flow-step" data-d="0">
+          <div class="cin-flow-icon" style="background:#dcfce7;">&#128176;</div>
+          <div class="cin-flow-label">Place your call</div>
+        </div>
+        <div class="cin-flow-arrow" data-d="1">&rarr;</div>
+        <div class="cin-flow-step" data-d="2">
+          <div class="cin-flow-icon" style="background:#f3e8ff;">&#128640;</div>
+          <div class="cin-flow-label">Share it</div>
+        </div>
+        <div class="cin-flow-arrow" data-d="3">&rarr;</div>
+        <div class="cin-flow-step" data-d="4">
+          <div class="cin-flow-icon" style="background:#fee2e2;">&#128293;</div>
+          <div class="cin-flow-label">Spark debate</div>
+        </div>
+        <div class="cin-flow-arrow" data-d="5">&rarr;</div>
+        <div class="cin-flow-step" data-d="6">
+          <div class="cin-flow-icon" style="background:#dcfce7;">&#10003;</div>
+          <div class="cin-flow-label">Get paid</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:10px;margin-top:24px;" id="cinPlats">
+        <div class="cin-tag" style="border-color:#000;color:#000;font-weight:700;">&#120143; X</div>
+        <div class="cin-tag" style="border-color:#25D366;color:#25D366;font-weight:700;">WhatsApp</div>
+        <div class="cin-tag" style="border-color:#E1306C;color:#E1306C;font-weight:700;">Instagram</div>
+        <div class="cin-tag" style="border-color:#111;color:#111;font-weight:700;">TikTok</div>
       </div>
     </div>
 
-    <!-- Slide 5: CTA -->
-    <div class="intro-slide" id="s5">
-      <div class="intro-logo-big" style="animation-duration:1.5s;">K</div>
-      <div class="intro-heading">Your opinion. Your money. Your receipts.</div>
-      <div class="intro-body" style="margin-bottom:28px;">Bet from R5. Share anywhere. Get paid instantly.</div>
-      <a href="kasi_markets.html" style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:#0a0a0a;padding:16px 32px;border-radius:14px;font-size:16px;font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(255,255,255,.15)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-        Start trading
+    <!-- 4: Payoff -->
+    <div class="cin-s" id="cs4">
+      <div class="cin-payout">
+        <div class="cin-check" id="cinCheck">&#10003;</div>
+        <div class="cin-amount" id="cinAmt">+ R 175.44</div>
+        <div class="cin-paylabel" id="cinPayL">Paid instantly via PayShap, Capitec, or MoMo</div>
+      </div>
+      <div class="cin-h" style="font-size:32px;margin-top:24px;">Your opinion.<br/>Your money. Your receipts.</div>
+      <a href="kasi_markets.html" class="cin-cta-btn" style="margin-top:24px;">
+        Start trading now
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
   </div>
 
-  <button class="intro-skip" id="introSkip">Skip intro &rarr;</button>
+  <button class="cin-skip" id="cinSkip">Skip intro &rarr;</button>
 </div>
 
 <script>
 (function(){
-  // ── Particles ──
-  const particleContainer = document.getElementById('introParticles');
-  for(let i=0;i<20;i++){
-    const p = document.createElement('div');
-    p.className='intro-particle';
-    p.style.left = Math.random()*100+'%';
-    p.style.top = (60+Math.random()*40)+'%';
-    p.style.animationDelay = Math.random()*4+'s';
-    p.style.animationDuration = (3+Math.random()*3)+'s';
-    p.style.width = p.style.height = (2+Math.random()*4)+'px';
-    p.style.background = Math.random()>.5 ? '#16a34a' : '#4ade80';
-    particleContainer.appendChild(p);
+  /* ── Particles ── */
+  const dots=document.getElementById('cinDots');
+  for(let i=0;i<30;i++){
+    const d=document.createElement('div');
+    d.className='cin-dot';
+    const sz=2+Math.random()*5;
+    d.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${50+Math.random()*50}%;background:${Math.random()>.4?'#16a34a':'#bbf7d0'};animation:${Math.random()>.5?'dotUp':'dotDrift'} ${3+Math.random()*4}s ${Math.random()*5}s ease-out infinite;`;
+    dots.appendChild(d);
   }
 
-  // ── Slide engine ──
-  const intro = document.getElementById('intro');
-  const progress = document.getElementById('introProgress');
-  const totalSlides = 6;
-  const durations = [2200, 3200, 3500, 3200, 3200, 4000]; // ms per slide
-  let current = 0;
-  let timer;
+  /* ── Engine ── */
+  const cin=document.getElementById('cin');
+  const bar=document.getElementById('cinBar');
+  const totalSlides=5;
+  const durations=[2300,2500,3000,3500,3500];
+  let cur=0,tmr;
 
-  function showSlide(n){
-    // Exit current
-    document.querySelectorAll('.intro-slide').forEach(s=>{
-      s.classList.remove('active');
-      s.classList.add('exit');
-    });
-    // Show next
+  function show(n){
+    // exit old
+    document.querySelectorAll('.cin-s').forEach(s=>{s.classList.remove('enter');s.classList.add('exit');});
     setTimeout(()=>{
-      document.querySelectorAll('.intro-slide').forEach(s=>s.classList.remove('exit'));
-      const slide = document.getElementById('s'+n);
-      if(slide) slide.classList.add('active');
+      document.querySelectorAll('.cin-s').forEach(s=>s.classList.remove('exit'));
+      const sl=document.getElementById('cs'+n);
+      if(sl) sl.classList.add('enter');
+      bar.style.width=((n+1)/totalSlides*100)+'%';
 
-      // Progress bar
-      progress.style.width = ((n+1)/totalSlides*100)+'%';
-
-      // Platform icons stagger (slide 3)
-      if(n===3){
-        const plats = document.querySelectorAll('.intro-plat');
-        plats.forEach((p,i)=>{
-          setTimeout(()=>p.classList.add('show'), 200+i*150);
+      // ── Per-slide animations ──
+      if(n===0){
+        const logo=document.getElementById('cinLogo');
+        logo.classList.add('pulse');
+        setTimeout(()=>document.getElementById('cinBrand').classList.add('show'),600);
+        setTimeout(()=>document.getElementById('cinTag').classList.add('show'),900);
+      }
+      if(n===1){
+        document.querySelectorAll('#cinTags .cin-tag').forEach((t,i)=>{
+          setTimeout(()=>t.classList.add('pop'),150+i*100);
         });
       }
-    }, 200);
+      if(n===2){
+        // Price tick animation
+        let prices=[57,58,59,58,60,59,61];
+        let idx=0;
+        const yb=document.getElementById('cinYes');
+        const nb=document.getElementById('cinNo');
+        const iv=setInterval(()=>{
+          if(idx>=prices.length){clearInterval(iv);return;}
+          const p=prices[idx];
+          yb.textContent='Yes '+p+'\u00a2';
+          nb.textContent='No '+(100-p)+'\u00a2';
+          yb.classList.remove('tick');nb.classList.remove('tick');
+          void yb.offsetWidth;
+          yb.classList.add('tick');nb.classList.add('tick');
+          idx++;
+        },350);
+      }
+      if(n===3){
+        // Stagger flow steps
+        document.querySelectorAll('#cinFlow [data-d]').forEach(el=>{
+          const d=parseInt(el.dataset.d);
+          setTimeout(()=>el.classList.add('show'),200+d*180);
+        });
+        // Platform pills pop
+        document.querySelectorAll('#cinPlats .cin-tag').forEach((t,i)=>{
+          setTimeout(()=>t.classList.add('pop'),1200+i*120);
+        });
+      }
+      if(n===4){
+        setTimeout(()=>document.getElementById('cinCheck').classList.add('pop'),200);
+        setTimeout(()=>document.getElementById('cinAmt').classList.add('show'),400);
+        setTimeout(()=>document.getElementById('cinPayL').classList.add('show'),600);
+      }
+    },180);
   }
 
   function advance(){
-    if(current >= totalSlides-1){
-      // Last slide — wait then close
-      timer = setTimeout(closeIntro, durations[current]);
-      return;
-    }
-    timer = setTimeout(()=>{
-      current++;
-      showSlide(current);
-      advance();
-    }, durations[current]);
+    if(cur>=totalSlides-1){tmr=setTimeout(close,durations[cur]);return;}
+    tmr=setTimeout(()=>{cur++;show(cur);advance();},durations[cur]);
   }
 
-  function closeIntro(){
-    intro.classList.add('done');
+  function close(){
+    cin.classList.add('done');
     document.body.style.overflow='';
-    setTimeout(()=>{intro.remove();}, 900);
+    setTimeout(()=>cin.remove(),1000);
   }
 
-  // Start
   document.body.style.overflow='hidden';
-  showSlide(0);
-  advance();
+  show(0);advance();
 
-  // Skip
-  document.getElementById('introSkip').addEventListener('click', ()=>{
-    clearTimeout(timer);
-    closeIntro();
-  });
+  document.getElementById('cinSkip').addEventListener('click',()=>{clearTimeout(tmr);close();});
 })();
 
-// ── Main page scripts ──
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 40);
-});
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+/* ── Main page scripts ── */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>40);});
+const observer=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:.1});
+document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
 </script>
 
 </body>
