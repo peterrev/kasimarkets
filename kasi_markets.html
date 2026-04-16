@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kasi Markets</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#ffffff;
+  --bg2:#f7f8fa;
+  --border:#e5e7eb;
+  --text:#111827;
+  --muted:#6b7280;
+  --light:#9ca3af;
+  --green:#16a34a;
+  --green-bg:#dcfce7;
+  --green-hover:#f0fdf4;
+  --red:#dc2626;
+  --red-bg:#fee2e2;
+  --red-hover:#fef2f2;
+  --blue:#2563eb;
+  --blue-bg:#eff6ff;
+}
+html{font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--text);background:var(--bg);font-size:14px;line-height:1.5;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;font-family:inherit;font-size:inherit;}
+input{font-family:inherit;}
+
+/* ─── NAV ─── */
+.nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;gap:24px;}
+.logo{font-weight:700;font-size:18px;display:flex;align-items:center;gap:8px;}
+.logo-mark{width:28px;height:28px;background:#111;border-radius:6px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;}
+.nav-links{display:flex;gap:4px;}
+.nav-links a{padding:6px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);transition:background .15s,color .15s;}
+.nav-links a:hover,.nav-links a.active{background:var(--bg2);color:var(--text);}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.search-box{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg2);border-radius:8px;font-size:13px;color:var(--muted);width:260px;border:1px solid transparent;transition:border .15s;}
+.search-box:focus-within{border-color:var(--border);background:#fff;}
+.search-box input{border:none;background:transparent;outline:none;flex:1;font-size:13px;color:var(--text);}
+.btn-primary{background:var(--text);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:600;font-size:13px;}
+.btn-outline{background:#fff;color:var(--text);border:1px solid var(--border);padding:8px 16px;border-radius:8px;font-weight:500;font-size:13px;}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--muted);}
+
+/* ─── TABS ─── */
+.tabs{border-bottom:1px solid var(--border);background:#fff;}
+.tabs-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;gap:0;overflow-x:auto;}
+.tabs-inner::-webkit-scrollbar{display:none;}
+.tab{padding:12px 16px;font-size:13px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--text);border-bottom-color:var(--text);}
+
+/* ─── CONTAINER ─── */
+.container{max-width:1200px;margin:0 auto;padding:0 24px;}
+
+/* ─── BANNER ─── */
+.banner{background:var(--bg2);border-bottom:1px solid var(--border);}
+.banner-inner{max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.banner-left{display:flex;align-items:center;gap:12px;}
+.banner-badge{background:#111;color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px;letter-spacing:.02em;}
+.banner-text{font-size:14px;color:var(--text);}
+.banner-text strong{font-weight:600;}
+.banner-meta{font-size:13px;color:var(--muted);}
+.banner-stat{font-weight:700;font-size:14px;color:var(--text);}
+
+/* ─── SECTION HEADERS ─── */
+.section-header{padding:24px 0 12px;display:flex;align-items:baseline;justify-content:space-between;}
+.section-title{font-size:16px;font-weight:700;}
+.section-link{font-size:13px;color:var(--blue);font-weight:500;}
+
+/* ─── MARKET ROW (Polymarket style) ─── */
+.market-list{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff;}
+.market-row{display:grid;grid-template-columns:1fr 200px;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);transition:background .1s;}
+.market-row:last-child{border-bottom:none;}
+.market-row:hover{background:var(--bg2);}
+.market-q{font-size:14px;font-weight:500;line-height:1.4;display:flex;align-items:start;gap:10px;}
+.market-icon{width:36px;height:36px;border-radius:8px;background:var(--bg2);display:grid;place-items:center;font-size:18px;flex-shrink:0;}
+.market-q-text{flex:1;}
+.market-meta{margin-top:4px;font-size:12px;color:var(--light);font-weight:400;}
+.market-btns{display:flex;gap:6px;justify-content:flex-end;}
+.btn-yes,.btn-no{border:none;padding:8px 0;border-radius:6px;font-weight:600;font-size:13px;width:90px;text-align:center;transition:background .15s;}
+.btn-yes{background:var(--green-bg);color:var(--green);}
+.btn-yes:hover{background:#bbf7d0;}
+.btn-no{background:var(--red-bg);color:var(--red);}
+.btn-no:hover{background:#fecaca;}
+
+/* ─── MARKET DETAIL ─── */
+.detail-grid{display:grid;grid-template-columns:1fr 360px;gap:24px;padding:24px 0 48px;}
+.detail-main{min-width:0;}
+.detail-sidebar{display:flex;flex-direction:column;gap:16px;}
+
+.detail-header{margin-bottom:20px;}
+.detail-cat{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:6px;}
+.detail-title{font-size:22px;font-weight:700;line-height:1.3;margin-bottom:8px;}
+.detail-resolve{font-size:12px;color:var(--light);}
+
+.stat-row{display:flex;gap:16px;margin-bottom:20px;}
+.stat-box{flex:1;background:var(--bg2);border-radius:10px;padding:14px 16px;}
+.stat-label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}
+.stat-val{font-size:22px;font-weight:700;}
+.stat-sub{font-size:12px;color:var(--light);margin-top:2px;}
+
+/* Chart */
+.chart-box{border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:20px;}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.chart-title{font-size:13px;font-weight:600;}
+.chart-tabs{display:flex;gap:2px;}
+.chart-tab{padding:4px 10px;border-radius:6px;font-size:12px;font-weight:500;color:var(--muted);background:transparent;border:none;transition:background .15s;}
+.chart-tab.active{background:var(--bg2);color:var(--text);}
+.chart-svg{width:100%;display:block;}
+
+/* Order box */
+.order-box{border:1px solid var(--border);border-radius:12px;padding:20px;background:#fff;}
+.order-header{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+.order-tab{flex:1;padding:10px;border-radius:8px;text-align:center;font-weight:600;font-size:14px;border:none;transition:background .15s;}
+.order-tab.yes-active{background:var(--green-bg);color:var(--green);}
+.order-tab.no-active{background:var(--red-bg);color:var(--red);}
+.order-tab.inactive{background:var(--bg2);color:var(--muted);}
+.order-label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:6px;}
+.order-input{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:18px;font-weight:700;outline:none;transition:border .15s;}
+.order-input:focus{border-color:#111;}
+.order-presets{display:flex;gap:6px;margin:10px 0 16px;}
+.order-preset{flex:1;padding:6px;border-radius:6px;border:1px solid var(--border);text-align:center;font-size:12px;font-weight:500;background:#fff;color:var(--muted);cursor:pointer;transition:background .1s,color .1s;}
+.order-preset:hover,.order-preset.active{background:var(--bg2);color:var(--text);}
+.order-summary{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:8px 0;border-top:1px solid var(--border);margin-bottom:12px;}
+.order-btn{width:100%;padding:14px;border-radius:10px;font-size:15px;font-weight:700;border:none;color:#fff;transition:opacity .15s;}
+.order-btn:hover{opacity:.9;}
+.order-btn.green{background:var(--green);}
+.order-btn.red{background:var(--red);}
+
+/* Share card */
+.share-card{border:1px solid var(--border);border-radius:12px;padding:20px;background:#fff;}
+.share-inner{border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;}
+.share-user{font-size:12px;color:var(--muted);margin-bottom:8px;}
+.share-q{font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.3;}
+.share-pos{display:inline-block;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;}
+.share-pos.yes{background:var(--green-bg);color:var(--green);}
+.share-payout{font-size:13px;color:var(--muted);margin-top:8px;}
+.share-payout strong{color:var(--green);font-weight:600;}
+.share-foot{font-size:11px;color:var(--light);margin-top:8px;}
+.share-btns{display:flex;gap:8px;}
+.share-btns button{flex:1;padding:10px;border-radius:8px;font-size:13px;font-weight:600;}
+.share-btns .copy{background:var(--bg2);border:1px solid var(--border);color:var(--text);}
+.share-btns .xshare{background:#111;color:#fff;border:none;}
+
+/* Activity */
+.activity{border:1px solid var(--border);border-radius:12px;padding:16px 20px;background:#fff;}
+.activity-title{font-size:13px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.dot-live{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.activity-item{display:flex;gap:8px;padding:6px 0;font-size:13px;color:var(--muted);}
+.activity-item+.activity-item{border-top:1px solid var(--border);}
+.activity-time{width:40px;flex-shrink:0;font-size:11px;color:var(--light);padding-top:1px;}
+.activity-item b{color:var(--text);font-weight:500;}
+.act-yes{color:var(--green);font-weight:600;}
+.act-no{color:var(--red);font-weight:600;}
+
+/* LGE Table */
+.lge-title-bar{display:flex;align-items:center;justify-content:space-between;padding:20px 0 12px;}
+.lge-heading{font-size:16px;font-weight:700;}
+.lge-sub{font-size:13px;color:var(--muted);font-weight:400;}
+.party-pills{display:flex;gap:4px;}
+.party-pill{padding:4px 12px;border-radius:100px;font-size:12px;font-weight:500;border:1px solid var(--border);color:var(--muted);background:#fff;cursor:pointer;}
+.party-pill.active{background:var(--text);color:#fff;border-color:var(--text);}
+.lge-table{width:100%;border-collapse:collapse;}
+.lge-table th{text-align:left;font-size:11px;font-weight:500;color:var(--light);text-transform:uppercase;letter-spacing:.05em;padding:10px 12px;border-bottom:1px solid var(--border);}
+.lge-table td{padding:12px;font-size:13px;border-bottom:1px solid var(--border);}
+.lge-table tr:last-child td{border-bottom:none;}
+.lge-table tr:hover td{background:var(--bg2);}
+.lge-metro{font-weight:600;}
+.lge-bar{width:100px;height:4px;background:#e5e7eb;border-radius:100px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px;}
+.lge-bar span{display:block;height:100%;border-radius:100px;}
+.lge-price{font-weight:600;font-size:13px;}
+.lge-change{font-size:12px;font-weight:500;}
+.lge-up{color:var(--green);}
+.lge-down{color:var(--red);}
+.btn-trade{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:500;border:1px solid var(--border);background:#fff;color:var(--text);}
+.btn-trade:hover{background:var(--bg2);}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);margin-top:24px;}
+.footer-inner{max-width:1200px;margin:0 auto;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--light);}
+.footer-links{display:flex;gap:16px;}
+.footer-links a{color:var(--muted);}
+.footer-links a:hover{color:var(--text);}
+
+@media(max-width:900px){
+  .detail-grid{grid-template-columns:1fr;} .stat-row{flex-wrap:wrap;} .nav-links,.search-box{display:none;}
+  .market-row{grid-template-columns:1fr 160px;}
+  .banner-inner{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo" style="text-decoration:none;color:inherit;">
+      <div class="logo-mark">K</div>
+      Kasi
+    </a>
+    <div class="nav-links">
+      <a class="active" href="#">Markets</a>
+      <a href="#">LGE 2026</a>
+      <a href="#">Sport</a>
+      <a href="#">Economy</a>
+      <a href="#">Culture</a>
+      <a href="kasi_guide.html">Guide</a>
+    </div>
+    <div class="nav-right">
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input placeholder="Search markets..." />
+      </div>
+      <button class="btn-outline">R 312.50</button>
+      <button class="btn-primary">Deposit</button>
+      <div class="avatar">TM</div>
+    </div>
+  </div>
+</nav>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tabs-inner">
+    <a class="tab active">Trending</a>
+    <a class="tab">New</a>
+    <a class="tab">Closing soon</a>
+    <a class="tab">Highest volume</a>
+    <a class="tab">Politics</a>
+    <a class="tab">Sport</a>
+    <a class="tab">Economy</a>
+    <a class="tab">Culture</a>
+    <a class="tab">Eskom</a>
+  </div>
+</div>
+
+<!-- LGE BANNER -->
+<div class="banner">
+  <div class="banner-inner">
+    <div class="banner-left">
+      <span class="banner-badge">LGE 2026</span>
+      <span class="banner-text"><strong>SA Local Government Elections</strong> &middot; 4 November 2026 &middot; 203 days away</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <div><span class="banner-meta">Total volume</span><br/><span class="banner-stat">R 14,823,410</span></div>
+      <div><span class="banner-meta">Traders</span><br/><span class="banner-stat">18,402</span></div>
+      <button class="btn-primary" style="white-space:nowrap;">LGE Hub &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- MARKET LIST -->
+<div class="container">
+  <div class="section-header">
+    <div class="section-title">Trending markets</div>
+    <a class="section-link" href="#">See all &rarr;</a>
+  </div>
+
+  <div class="market-list">
+
+    <div class="market-row">
+      <div class="market-q">
+        <div class="market-icon">🗳️</div>
+        <div class="market-q-text">
+          Will the ANC poll under 40% nationally in LGE 2026?
+          <div class="market-meta">R 2.41M vol &middot; 4,122 traders &middot; Closes 3 Nov 2026</div>
+        </div>
+      </div>
+      <div class="market-btns">
+        <button class="btn-yes">Yes 57¢</button>
+        <button class="btn-no">No 43¢</button>
+      </div>
+    </div>
+
+    <div class="market-row">
+      <div class="market-q">
+        <div class="market-icon">⚽</div>
+        <div class="market-q-text">
+          Will Sundowns win the PSL title for a 7th straight season?
+          <div class="market-meta">R 1.12M vol &middot; 2,340 traders &middot; Closes Sat 19:30</div>
+        </div>
+      </div>
+      <div class="market-btns">
+        <button class="btn-yes">Yes 81¢</button>
+        <button class="btn-no">No 19¢</button>
+      </div>
+    </div>
+
+    <div class="market-row">
+      <div class="market-q">
+        <div class="market-icon">💱</div>
+        <div class="market-q-text">
+          Will SARB cut the repo rate at the May 2026 MPC?
+          <div class="market-meta">R 418k vol &middot; 812 traders &middot; Closes 28 May</div>
+        </div>
+      </div>
+      <div class="market-btns">
+        <button class="btn-yes">Yes 34¢</button>
+        <button class="btn-no">No 66¢</button>
+      </div>
+    </div>
+
+    <div class="market-row">
+      <div class="market-q">
+        <div class="market-icon">🗳️</div>
+        <div class="market-q-text">
+          Will the DA retain the City of Cape Town outright?
+          <div class="market-meta">R 687k vol &middot; 1,504 traders &middot; Closes 3 Nov 2026</div>
+        </div>
+      </div>
+      <div class="market-btns">
+        <button class="btn-yes">Yes 72¢</button>
+        <button class="btn-no">No 28¢</button>
+      </div>
+    </div>
+
+    <div class="market-row">
+      <div class="market-q">
+        <div class="market-icon">⚡</div>
+        <div class="market-q-text">
+          Will SA have zero load-shedding in April 2026?
+          <div class="market-meta">R 902k vol &middot; 3,180 traders &middot; Closes 30 Apr</div>
+        </div>
+      </div>
+      <div class="market-btns">
+        <button class="btn-yes">Yes 46¢</button>
+        <button class="btn-no">No 54¢</button>
+      </div>
+    </div>
+
+    <div class="market-row">
+      <div class="market-q">
+        <div class="market-icon">🎤</div>
+        <div class="market-q-text">
+          Will Tyla win Best International Act at the BET Awards?
+          <div class="market-meta">R 214k vol &middot; 978 traders &middot; Closes 22 Jun</div>
+        </div>
+      </div>
+      <div class="market-btns">
+        <button class="btn-yes">Yes 63¢</button>
+        <button class="btn-no">No 37¢</button>
+      </div>
+    </div>
+
+    <div class="market-row">
+      <div class="market-q">
+        <div class="market-icon">🏉</div>
+        <div class="market-q-text">
+          Will the Springboks beat the British & Irish Lions in the 1st Test?
+          <div class="market-meta">R 1.84M vol &middot; 5,012 traders &middot; Closes 19 Jul</div>
+        </div>
+      </div>
+      <div class="market-btns">
+        <button class="btn-yes">Yes 68¢</button>
+        <button class="btn-no">No 32¢</button>
+      </div>
+    </div>
+
+    <div class="market-row">
+      <div class="market-q">
+        <div class="market-icon">📉</div>
+        <div class="market-q-text">
+          Will the rand be below R18/USD by December 2026?
+          <div class="market-meta">R 540k vol &middot; 1,204 traders &middot; Closes 31 Dec 2026</div>
+        </div>
+      </div>
+      <div class="market-btns">
+        <button class="btn-yes">Yes 41¢</button>
+        <button class="btn-no">No 59¢</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LGE METRO TABLE -->
+  <div class="lge-title-bar">
+    <div>
+      <div class="lge-heading">LGE 2026 · Metro races</div>
+      <div class="lge-sub">The crowd's live read on who takes each metro</div>
+    </div>
+    <div class="party-pills">
+      <span class="party-pill active">All</span>
+      <span class="party-pill">ANC</span>
+      <span class="party-pill">DA</span>
+      <span class="party-pill">MK</span>
+      <span class="party-pill">EFF</span>
+    </div>
+  </div>
+
+  <div class="market-list">
+    <table class="lge-table">
+      <thead>
+        <tr>
+          <th>Metro</th>
+          <th>Market</th>
+          <th>Probability</th>
+          <th>24h</th>
+          <th>Volume</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lge-metro">Johannesburg</td>
+          <td>ANC wins outright</td>
+          <td><span class="lge-bar"><span style="width:31%;background:var(--green);"></span></span><span class="lge-price">31¢</span></td>
+          <td class="lge-change lge-down">-4.2¢</td>
+          <td>R 612k</td>
+          <td><button class="btn-trade">Trade</button></td>
+        </tr>
+        <tr>
+          <td class="lge-metro">Cape Town</td>
+          <td>DA retains</td>
+          <td><span class="lge-bar"><span style="width:72%;background:var(--green);"></span></span><span class="lge-price">72¢</span></td>
+          <td class="lge-change lge-up">+1.1¢</td>
+          <td>R 687k</td>
+          <td><button class="btn-trade">Trade</button></td>
+        </tr>
+        <tr>
+          <td class="lge-metro">eThekwini</td>
+          <td>MK largest party</td>
+          <td><span class="lge-bar"><span style="width:48%;background:var(--green);"></span></span><span class="lge-price">48¢</span></td>
+          <td class="lge-change lge-up">+6.8¢</td>
+          <td>R 1.02M</td>
+          <td><button class="btn-trade">Trade</button></td>
+        </tr>
+        <tr>
+          <td class="lge-metro">Tshwane</td>
+          <td>Coalition (no outright winner)</td>
+          <td><span class="lge-bar"><span style="width:66%;background:var(--green);"></span></span><span class="lge-price">66¢</span></td>
+          <td class="lge-change lge-down">-0.4¢</td>
+          <td>R 388k</td>
+          <td><button class="btn-trade">Trade</button></td>
+        </tr>
+        <tr>
+          <td class="lge-metro">Nelson Mandela Bay</td>
+          <td>DA largest party</td>
+          <td><span class="lge-bar"><span style="width:54%;background:var(--green);"></span></span><span class="lge-price">54¢</span></td>
+          <td class="lge-change lge-up">+2.0¢</td>
+          <td>R 221k</td>
+          <td><button class="btn-trade">Trade</button></td>
+        </tr>
+        <tr>
+          <td class="lge-metro">Ekurhuleni</td>
+          <td>ANC largest party</td>
+          <td><span class="lge-bar"><span style="width:44%;background:var(--green);"></span></span><span class="lge-price">44¢</span></td>
+          <td class="lge-change lge-up">+1.5¢</td>
+          <td>R 318k</td>
+          <td><button class="btn-trade">Trade</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MARKET DETAIL VIEW -->
+  <div style="border-top:1px solid var(--border);margin-top:32px;padding-top:8px;">
+    <div class="section-header">
+      <div class="section-title">Market detail</div>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div class="detail-main">
+      <!-- Header -->
+      <div class="detail-header">
+        <div class="detail-cat">LGE 2026 &middot; Politics</div>
+        <div class="detail-title">Will the ANC receive less than 40% of the national vote in LGE 2026?</div>
+        <div class="detail-resolve">Resolves 6 Nov 2026 &middot; Source: IEC official results &middot; Market #LGE-ANC-NAT-40</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="stat-label">Yes price</div>
+          <div class="stat-val" style="color:var(--green);">57¢</div>
+          <div class="stat-sub">Implied probability 57%</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Volume</div>
+          <div class="stat-val">R 2.41M</div>
+          <div class="stat-sub">4,122 traders</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Your position</div>
+          <div class="stat-val">R 120 <span style="font-size:13px;color:var(--green);font-weight:600;">YES</span></div>
+          <div class="stat-sub">Avg. 52¢ &middot; P/L +R 11.50</div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-box">
+        <div class="chart-header">
+          <div class="chart-title">Probability</div>
+          <div class="chart-tabs">
+            <button class="chart-tab">1H</button>
+            <button class="chart-tab">1D</button>
+            <button class="chart-tab">1W</button>
+            <button class="chart-tab active">1M</button>
+            <button class="chart-tab">All</button>
+          </div>
+        </div>
+        <svg viewBox="0 0 700 180" class="chart-svg" style="height:180px;">
+          <!-- Grid lines -->
+          <line x1="0" y1="36" x2="700" y2="36" stroke="#e5e7eb" stroke-width="0.5"/>
+          <line x1="0" y1="72" x2="700" y2="72" stroke="#e5e7eb" stroke-width="0.5"/>
+          <line x1="0" y1="108" x2="700" y2="108" stroke="#e5e7eb" stroke-width="0.5"/>
+          <line x1="0" y1="144" x2="700" y2="144" stroke="#e5e7eb" stroke-width="0.5"/>
+          <!-- Y labels -->
+          <text x="4" y="34" font-size="10" fill="#9ca3af">80¢</text>
+          <text x="4" y="70" font-size="10" fill="#9ca3af">60¢</text>
+          <text x="4" y="106" font-size="10" fill="#9ca3af">40¢</text>
+          <text x="4" y="142" font-size="10" fill="#9ca3af">20¢</text>
+          <!-- Area -->
+          <defs>
+            <linearGradient id="grad" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#16a34a" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#16a34a" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M30,126 L70,130 110,122 150,112 190,116 230,102 270,92 310,96 350,82 390,86 430,72 470,76 510,66 550,70 590,60 630,56 670,52 L670,170 L30,170 Z" fill="url(#grad)"/>
+          <!-- Line -->
+          <path d="M30,126 L70,130 110,122 150,112 190,116 230,102 270,92 310,96 350,82 390,86 430,72 470,76 510,66 550,70 590,60 630,56 670,52" stroke="#16a34a" stroke-width="2" fill="none" stroke-linejoin="round"/>
+          <!-- Dot at end -->
+          <circle cx="670" cy="52" r="4" fill="#16a34a"/>
+          <!-- Current price label -->
+          <rect x="648" y="36" width="42" height="20" rx="4" fill="#16a34a"/>
+          <text x="669" y="50" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">57¢</text>
+        </svg>
+      </div>
+
+      <!-- Resolution info -->
+      <div style="padding:16px 20px;background:var(--bg2);border-radius:10px;font-size:13px;color:var(--muted);line-height:1.6;">
+        <strong style="color:var(--text);">Resolution criteria</strong><br/>
+        This market resolves YES if the ANC receives less than 40% of the national aggregate vote in the 2026 Local Government Elections, as published by the IEC within 7 days of the 4 November 2026 vote. Single named independent source. No ambiguity.
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="detail-sidebar">
+
+      <!-- Order box -->
+      <div class="order-box">
+        <div class="order-header">
+          <button class="order-tab yes-active">Yes 57¢</button>
+          <button class="order-tab inactive">No 43¢</button>
+        </div>
+        <div class="order-label">Amount</div>
+        <input class="order-input" value="R 50" />
+        <div class="order-presets">
+          <div class="order-preset">R10</div>
+          <div class="order-preset">R20</div>
+          <div class="order-preset active">R50</div>
+          <div class="order-preset">R100</div>
+        </div>
+        <div class="order-summary">
+          <span>Shares</span><span style="color:var(--text);font-weight:500;">87.7</span>
+        </div>
+        <div class="order-summary" style="border:none;padding-top:0;">
+          <span>Potential return</span><span style="color:var(--green);font-weight:600;">R 87.72 (75.4%)</span>
+        </div>
+        <button class="order-btn green">Buy Yes</button>
+      </div>
+
+      <!-- Share card -->
+      <div class="share-card">
+        <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:10px;">Share your position</div>
+        <div class="share-inner">
+          <div class="share-user">kasi.markets &middot; @thabo_m</div>
+          <div class="share-q">ANC under 40% nationally in LGE 2026</div>
+          <span class="share-pos yes">YES &middot; 57¢</span>
+          <div class="share-payout">If I'm right: <strong>R 210.53</strong></div>
+          <div class="share-foot">Screenshot this. Quote-tweet me in November.</div>
+        </div>
+        <div class="share-btns">
+          <button class="copy">Copy link</button>
+          <button class="xshare">Share to X</button>
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="activity">
+        <div class="activity-title"><span class="dot-live"></span> Recent activity</div>
+        <div class="activity-item"><span class="activity-time">2s</span><span><b>@lerato_calls</b> bought <span class="act-yes">YES</span> &middot; R50</span></div>
+        <div class="activity-item"><span class="activity-time">14s</span><span><b>@boet_quant</b> bought <span class="act-no">NO</span> &middot; R200</span></div>
+        <div class="activity-item"><span class="activity-time">42s</span><span><b>@sbu_sport</b> bought <span class="act-yes">YES</span> &middot; R20</span></div>
+        <div class="activity-item"><span class="activity-time">1m</span><span><b>@mzansi_oracle</b> bought <span class="act-yes">YES</span> &middot; R150</span></div>
+        <div class="activity-item"><span class="activity-time">2m</span><span><b>@tshepi_tweets</b> bought <span class="act-no">NO</span> &middot; R35</span></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="logo-mark" style="width:20px;height:20px;font-size:10px;">K</div>
+      &copy; 2026 KasiMarkets (Pty) Ltd
+    </div>
+    <div class="footer-links">
+      <a>About</a>
+      <a>Markets</a>
+      <a>Careers</a>
+      <a>Responsible play</a>
+      <a>Licence</a>
+    </div>
+    <div>Prediction markets are wagers on real-world outcomes. 18+. T&Cs apply.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     INTERACTIVE PRODUCT TOUR — Intercom/Appcues-style overlay
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+/* Tour overlay */
+.tour-overlay{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .3s;}
+.tour-overlay.active{opacity:1;pointer-events:auto;}
+
+/* Tour spotlight cutout */
+.tour-spotlight{position:fixed;z-index:9999;border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.45);transition:all .4s cubic-bezier(.4,0,.2,1);pointer-events:none;}
+
+/* Tour tooltip */
+.tour-tip{position:fixed;z-index:10000;background:#fff;border-radius:14px;padding:24px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06);opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;pointer-events:none;}
+.tour-tip.active{opacity:1;transform:translateY(0);pointer-events:auto;}
+.tour-tip-arrow{position:absolute;width:12px;height:12px;background:#fff;transform:rotate(45deg);box-shadow:-1px -1px 0 rgba(0,0,0,.06);}
+.tour-step-badge{display:inline-block;background:var(--text);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:100px;margin-bottom:10px;}
+.tour-title{font-size:16px;font-weight:700;margin-bottom:6px;line-height:1.3;}
+.tour-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+.tour-desc strong{color:var(--text);}
+.tour-footer{display:flex;align-items:center;justify-content:space-between;}
+.tour-dots{display:flex;gap:5px;}
+.tour-dot{width:7px;height:7px;border-radius:50%;background:var(--border);}
+.tour-dot.active{background:var(--text);}
+.tour-btns{display:flex;gap:8px;}
+.tour-btn-skip{background:none;border:none;font-size:13px;color:var(--muted);font-weight:500;padding:8px 12px;}
+.tour-btn-skip:hover{color:var(--text);}
+.tour-btn-next{background:var(--text);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;}
+.tour-btn-next:hover{opacity:.9;}
+.tour-btn-back{background:var(--bg2);color:var(--text);border:1px solid var(--border);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;}
+
+/* Welcome modal */
+.tour-welcome{position:fixed;z-index:10001;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);background:#fff;border-radius:16px;padding:40px;width:460px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;}
+.tour-welcome.active{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1);}
+.tour-welcome-icon{width:56px;height:56px;background:var(--text);border-radius:14px;display:grid;place-items:center;color:#fff;font-size:26px;font-weight:800;margin:0 auto 20px;}
+.tour-welcome h2{font-size:22px;font-weight:700;margin-bottom:8px;}
+.tour-welcome p{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:24px;}
+.tour-welcome-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left;margin-bottom:24px;}
+.tour-welcome-feat{display:flex;gap:8px;align-items:start;font-size:13px;background:var(--bg2);padding:10px 12px;border-radius:8px;}
+.tour-welcome-feat span{color:var(--green);font-size:16px;flex-shrink:0;margin-top:1px;}
+.tour-welcome-start{background:var(--text);color:#fff;border:none;padding:12px 32px;border-radius:10px;font-size:15px;font-weight:700;width:100%;}
+.tour-welcome-start:hover{opacity:.9;}
+.tour-welcome-skip{display:block;margin:12px auto 0;background:none;border:none;font-size:13px;color:var(--muted);}
+
+/* Floating "Take Tour" button (visible after tour is dismissed) */
+.tour-trigger{position:fixed;bottom:24px;right:24px;z-index:9000;background:var(--text);color:#fff;border:none;padding:12px 20px;border-radius:100px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.15);display:flex;align-items:center;gap:8px;transition:transform .15s,box-shadow .15s;}
+.tour-trigger:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.2);}
+.tour-trigger svg{width:16px;height:16px;}
+.tour-trigger.hidden{display:none;}
+</style>
+
+<!-- Tour overlay -->
+<div class="tour-overlay" id="tourOverlay"></div>
+<div class="tour-spotlight" id="tourSpotlight"></div>
+<div class="tour-tip" id="tourTip">
+  <div class="tour-tip-arrow" id="tourArrow"></div>
+  <div class="tour-step-badge" id="tourBadge"></div>
+  <div class="tour-title" id="tourTitle"></div>
+  <div class="tour-desc" id="tourDesc"></div>
+  <div class="tour-footer">
+    <div class="tour-dots" id="tourDots"></div>
+    <div class="tour-btns">
+      <button class="tour-btn-skip" id="tourSkip">Skip tour</button>
+      <button class="tour-btn-back" id="tourBack" style="display:none;">Back</button>
+      <button class="tour-btn-next" id="tourNext">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- Welcome modal -->
+<div class="tour-welcome" id="tourWelcome">
+  <div class="tour-welcome-icon">K</div>
+  <h2>Welcome to Kasi Markets</h2>
+  <p>Africa's first regulated prediction market. Take a 60-second tour to learn how to browse markets, place bets, and share your calls to X.</p>
+  <div class="tour-welcome-features">
+    <div class="tour-welcome-feat"><span>&#10003;</span> Browse live markets</div>
+    <div class="tour-welcome-feat"><span>&#10003;</span> Place YES / NO bets</div>
+    <div class="tour-welcome-feat"><span>&#10003;</span> Track the LGE 2026</div>
+    <div class="tour-welcome-feat"><span>&#10003;</span> Share bets to X</div>
+    <div class="tour-welcome-feat"><span>&#10003;</span> Read live charts</div>
+    <div class="tour-welcome-feat"><span>&#10003;</span> Climb the leaderboard</div>
+  </div>
+  <button class="tour-welcome-start" id="tourStart">Take the tour</button>
+  <button class="tour-welcome-skip" id="tourWelcomeSkip">I'll explore on my own</button>
+</div>
+
+<!-- Floating trigger button -->
+<button class="tour-trigger hidden" id="tourTrigger" title="Restart product tour">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+  Take the tour
+</button>
+
+<script>
+(function(){
+  const steps = [
+    {
+      target: '.nav-inner',
+      title: 'Navigation',
+      desc: 'Browse markets by category — <strong>Politics, Sport, Economy, Culture</strong> — or search for any market directly. Your balance and deposit button sit top-right.',
+      position: 'bottom',
+    },
+    {
+      target: '.tabs-inner',
+      title: 'Market filters',
+      desc: 'Filter markets by what matters to you — <strong>Trending, New, Closing soon</strong>, or by category. Think of these like feeds. The hottest markets surface first.',
+      position: 'bottom',
+    },
+    {
+      target: '.banner',
+      title: 'LGE 2026 hub',
+      desc: 'The <strong>SA Local Government Elections</strong> are the launch event. This banner links to the dedicated LGE hub — every metro, every ward, every party race in one place. Total volume updates live.',
+      position: 'bottom',
+    },
+    {
+      target: '.market-list',
+      title: 'Market rows',
+      desc: 'Each row is a single question with a binary outcome. You see the <strong>YES price</strong> (the crowd\'s implied probability), volume, and trader count. Tap <strong>Yes</strong> or <strong>No</strong> to jump straight into a trade.',
+      position: 'bottom',
+    },
+    {
+      target: '.market-btns',
+      title: 'Yes / No buttons',
+      desc: 'The price shown is in cents. <strong>Yes 57¢</strong> means the crowd thinks there\'s a 57% chance it happens. If you buy Yes at 57¢ and it resolves Yes, you get <strong>R1.00 per share</strong>. Simple.',
+      position: 'left',
+    },
+    {
+      target: '.lge-table',
+      title: 'LGE metro board',
+      desc: 'Every metro has its own race. See which party the crowd thinks wins each city, with <strong>live probability bars, 24h price changes</strong>, and volume. This is the heartbeat of the LGE hub.',
+      position: 'top',
+    },
+    {
+      target: '.chart-box',
+      title: 'Probability chart',
+      desc: 'The price chart shows how the crowd\'s view has shifted over time. Toggle between <strong>1H, 1D, 1W, 1M, and All</strong>. The green line is the YES price — a rising line means the crowd thinks it\'s more likely to happen.',
+      position: 'top',
+    },
+    {
+      target: '.order-box',
+      title: 'Place a bet',
+      desc: 'Choose <strong>Yes or No</strong>, enter an amount from R5 upward, and see your potential return instantly. Tap a preset or type a custom amount. One tap to confirm. <strong>Deposit-to-bet in under 60 seconds</strong> via PayShap or Capitec.',
+      position: 'left',
+    },
+    {
+      target: '.share-card',
+      title: 'Share to X — the growth engine',
+      desc: 'This is the most important feature. Every bet generates a <strong>shareable card</strong> with your position, your stake, and your potential payout. Hit <strong>"Share to X"</strong> and your followers see your call. When you\'re right — you come back to claim receipts publicly. <strong>This is how Kasi Markets grows: every share is a free ad reaching a targeted, high-intent audience.</strong>',
+      position: 'left',
+    },
+    {
+      target: '.activity',
+      title: 'Live activity feed',
+      desc: 'See what the community is trading in real time. <strong>Social proof drives action</strong> — when you see others piling into a market, it creates urgency and FOMO. This is the pulse of the platform.',
+      position: 'left',
+    },
+  ];
+
+  let currentStep = -1;
+  const overlay = document.getElementById('tourOverlay');
+  const spotlight = document.getElementById('tourSpotlight');
+  const tip = document.getElementById('tourTip');
+  const arrow = document.getElementById('tourArrow');
+  const badge = document.getElementById('tourBadge');
+  const title = document.getElementById('tourTitle');
+  const desc = document.getElementById('tourDesc');
+  const dots = document.getElementById('tourDots');
+  const welcome = document.getElementById('tourWelcome');
+  const trigger = document.getElementById('tourTrigger');
+  const btnNext = document.getElementById('tourNext');
+  const btnBack = document.getElementById('tourBack');
+  const btnSkip = document.getElementById('tourSkip');
+
+  function showWelcome(){
+    overlay.classList.add('active');
+    welcome.classList.add('active');
+  }
+  function hideWelcome(){
+    welcome.classList.remove('active');
+  }
+
+  function startTour(){
+    hideWelcome();
+    trigger.classList.add('hidden');
+    currentStep = 0;
+    showStep();
+  }
+
+  function endTour(){
+    overlay.classList.remove('active');
+    tip.classList.remove('active');
+    spotlight.style.display = 'none';
+    hideWelcome();
+    trigger.classList.remove('hidden');
+    currentStep = -1;
+  }
+
+  function showStep(){
+    const step = steps[currentStep];
+    const el = document.querySelector(step.target);
+    if(!el){ endTour(); return; }
+
+    // Scroll element into view
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+
+    setTimeout(()=>{
+      const rect = el.getBoundingClientRect();
+      const pad = 8;
+
+      // Spotlight
+      spotlight.style.display = 'block';
+      spotlight.style.top = (rect.top - pad) + 'px';
+      spotlight.style.left = (rect.left - pad) + 'px';
+      spotlight.style.width = (rect.width + pad*2) + 'px';
+      spotlight.style.height = (rect.height + pad*2) + 'px';
+
+      // Badge
+      badge.textContent = (currentStep+1) + ' of ' + steps.length;
+      title.textContent = step.title;
+      desc.innerHTML = step.desc;
+
+      // Dots
+      dots.innerHTML = steps.map((_,i)=>`<div class="tour-dot${i===currentStep?' active':''}"></div>`).join('');
+
+      // Position tooltip
+      const tipW = 380;
+      const tipH = tip.offsetHeight || 220;
+      let top, left;
+
+      if(step.position === 'bottom'){
+        top = rect.bottom + pad + 12;
+        left = rect.left + rect.width/2 - tipW/2;
+        arrow.style.cssText = 'top:-6px;left:50%;transform:translateX(-50%) rotate(45deg);';
+      } else if(step.position === 'top'){
+        top = rect.top - pad - tipH - 12;
+        left = rect.left + rect.width/2 - tipW/2;
+        arrow.style.cssText = 'bottom:-6px;left:50%;transform:translateX(-50%) rotate(45deg);';
+      } else if(step.position === 'left'){
+        top = rect.top + rect.height/2 - tipH/2;
+        left = rect.left - pad - tipW - 12;
+        arrow.style.cssText = 'right:-6px;top:50%;transform:translateY(-50%) rotate(45deg);';
+      } else {
+        top = rect.top + rect.height/2 - tipH/2;
+        left = rect.right + pad + 12;
+        arrow.style.cssText = 'left:-6px;top:50%;transform:translateY(-50%) rotate(45deg);';
+      }
+
+      // Clamp to viewport
+      left = Math.max(16, Math.min(left, window.innerWidth - tipW - 16));
+      top = Math.max(16, Math.min(top, window.innerHeight - tipH - 16));
+
+      tip.style.top = top + 'px';
+      tip.style.left = left + 'px';
+      tip.classList.add('active');
+
+      // Buttons
+      btnBack.style.display = currentStep > 0 ? 'inline-block' : 'none';
+      btnNext.textContent = currentStep === steps.length - 1 ? 'Finish tour' : 'Next';
+    }, 400);
+  }
+
+  btnNext.addEventListener('click', ()=>{
+    if(currentStep >= steps.length - 1){ endTour(); return; }
+    currentStep++;
+    tip.classList.remove('active');
+    setTimeout(showStep, 150);
+  });
+
+  btnBack.addEventListener('click', ()=>{
+    if(currentStep <= 0) return;
+    currentStep--;
+    tip.classList.remove('active');
+    setTimeout(showStep, 150);
+  });
+
+  btnSkip.addEventListener('click', endTour);
+  document.getElementById('tourWelcomeSkip').addEventListener('click', endTour);
+  document.getElementById('tourStart').addEventListener('click', startTour);
+  trigger.addEventListener('click', ()=>{ trigger.classList.add('hidden'); showWelcome(); });
+
+  // Auto-show welcome on load
+  setTimeout(showWelcome, 600);
+})();
+</script>
+
+</body>
+</html>

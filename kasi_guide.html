@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>How Kasi Markets Works — Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#ffffff;--bg2:#f7f8fa;--border:#e5e7eb;--text:#111827;--muted:#6b7280;--light:#9ca3af;
+  --green:#16a34a;--green-bg:#dcfce7;--red:#dc2626;--red-bg:#fee2e2;--blue:#2563eb;--blue-bg:#eff6ff;
+}
+html{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);font-size:15px;line-height:1.7;scroll-behavior:smooth;}
+a{color:var(--blue);text-decoration:none;}
+a:hover{text-decoration:underline;}
+button{cursor:pointer;font-family:inherit;}
+img{max-width:100%;border-radius:12px;}
+
+/* ─── NAV ─── */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:800px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;gap:16px;}
+.logo{font-weight:700;font-size:17px;display:flex;align-items:center;gap:8px;color:var(--text);}
+.logo-mark{width:26px;height:26px;background:#111;border-radius:6px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px;}
+.nav-right{margin-left:auto;display:flex;gap:8px;}
+.nav-btn{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid var(--border);background:#fff;color:var(--text);}
+.nav-btn-primary{background:var(--text);color:#fff;border:none;font-weight:600;}
+
+/* ─── HERO ─── */
+.hero{max-width:800px;margin:0 auto;padding:60px 24px 40px;text-align:center;}
+.hero-badge{display:inline-block;background:var(--bg2);border:1px solid var(--border);border-radius:100px;padding:4px 14px;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:16px;}
+.hero h1{font-size:36px;font-weight:800;line-height:1.2;margin-bottom:12px;letter-spacing:-.02em;}
+.hero p{font-size:17px;color:var(--muted);max-width:560px;margin:0 auto 28px;line-height:1.6;}
+.hero-actions{display:flex;justify-content:center;gap:12px;}
+.hero-btn{padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;border:none;}
+.hero-btn-dark{background:var(--text);color:#fff;}
+.hero-btn-outline{background:#fff;border:1px solid var(--border);color:var(--text);}
+
+/* ─── TOC ─── */
+.toc{max-width:800px;margin:0 auto;padding:0 24px 40px;}
+.toc-box{background:var(--bg2);border-radius:12px;padding:24px 28px;}
+.toc-title{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+.toc-list{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;list-style:none;}
+.toc-list li{font-size:14px;}
+.toc-list a{color:var(--text);font-weight:500;display:flex;align-items:center;gap:8px;padding:4px 0;}
+.toc-list a:hover{color:var(--blue);text-decoration:none;}
+.toc-num{width:22px;height:22px;border-radius:6px;background:#fff;border:1px solid var(--border);display:grid;place-items:center;font-size:11px;font-weight:600;color:var(--muted);flex-shrink:0;}
+
+/* ─── SECTIONS ─── */
+.guide{max-width:800px;margin:0 auto;padding:0 24px;}
+.section{padding:48px 0;border-top:1px solid var(--border);}
+.section:first-child{border-top:none;}
+.section-num{display:inline-block;background:var(--text);color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:100px;margin-bottom:12px;}
+.section h2{font-size:24px;font-weight:700;margin-bottom:8px;line-height:1.3;}
+.section .lead{font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+
+/* Visual blocks */
+.vis{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;margin:20px 0;}
+.vis-label{font-size:11px;font-weight:600;color:var(--light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;}
+
+/* Mock UI elements inside guide */
+.mock-row{display:flex;align-items:center;padding:14px 16px;border:1px solid var(--border);border-radius:10px;background:#fff;gap:12px;margin:8px 0;}
+.mock-icon{width:32px;height:32px;border-radius:8px;background:var(--bg2);display:grid;place-items:center;font-size:16px;flex-shrink:0;}
+.mock-q{flex:1;font-size:14px;font-weight:500;}
+.mock-meta{font-size:12px;color:var(--light);margin-top:2px;font-weight:400;}
+.mock-btns{display:flex;gap:6px;}
+.mock-yes,.mock-no{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;border:none;}
+.mock-yes{background:var(--green-bg);color:var(--green);}
+.mock-no{background:var(--red-bg);color:var(--red);}
+
+/* Price explanation */
+.price-explain{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+.price-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;}
+.price-card .price{font-size:32px;font-weight:800;margin:8px 0 4px;}
+.price-card .label{font-size:13px;color:var(--muted);}
+.price-card .explain{font-size:12px;color:var(--light);margin-top:6px;}
+
+/* Share card mock */
+.share-mock{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;max-width:340px;margin:16px auto;}
+.share-mock-user{font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.share-mock-logo{width:18px;height:18px;background:#111;border-radius:4px;display:grid;place-items:center;color:#fff;font-size:9px;font-weight:700;}
+.share-mock-q{font-size:14px;font-weight:600;margin-bottom:10px;}
+.share-mock-pos{display:inline-block;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;background:var(--green-bg);color:var(--green);}
+.share-mock-pay{font-size:13px;color:var(--muted);margin-top:8px;}
+.share-mock-pay strong{color:var(--green);}
+.share-mock-foot{font-size:11px;color:var(--light);margin-top:8px;font-style:italic;}
+
+/* Flow diagram */
+.flow{display:flex;align-items:center;gap:0;margin:20px 0;flex-wrap:wrap;justify-content:center;}
+.flow-step{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;text-align:center;min-width:140px;}
+.flow-step-num{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px;}
+.flow-step-text{font-size:13px;font-weight:600;}
+.flow-arrow{font-size:18px;color:var(--light);padding:0 6px;}
+
+/* Callout */
+.callout{background:var(--blue-bg);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:16px 20px;margin:20px 0;font-size:13px;line-height:1.6;}
+.callout strong{color:var(--text);}
+
+.callout-green{background:var(--green-bg);border-left-color:var(--green);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0;}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;}
+.stat-card .val{font-size:24px;font-weight:800;margin-bottom:2px;}
+.stat-card .label{font-size:12px;color:var(--muted);}
+
+/* Steps list */
+.steps-list{list-style:none;counter-reset:steps;margin:16px 0;}
+.steps-list li{counter-increment:steps;display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);font-size:14px;line-height:1.5;}
+.steps-list li:last-child{border-bottom:none;}
+.steps-list li::before{content:counter(steps);width:28px;height:28px;background:var(--bg2);border-radius:8px;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0;margin-top:2px;}
+
+/* Flywheel */
+.flywheel{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0;}
+.fly-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;}
+.fly-card .fly-num{font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px;}
+.fly-card .fly-title{font-size:14px;font-weight:600;margin-bottom:4px;}
+.fly-card .fly-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* Footer */
+.guide-footer{max-width:800px;margin:0 auto;padding:40px 24px;border-top:1px solid var(--border);text-align:center;}
+.guide-footer p{font-size:13px;color:var(--light);}
+.guide-footer a{color:var(--text);font-weight:500;}
+
+@media(max-width:600px){
+  .hero h1{font-size:26px;}
+  .toc-list{grid-template-columns:1fr;}
+  .price-explain,.flywheel,.stats-grid{grid-template-columns:1fr;}
+  .flow{flex-direction:column;} .flow-arrow{transform:rotate(90deg);}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="kasi_markets.html" class="logo" style="text-decoration:none;">
+      <div class="logo-mark">K</div>
+      Kasi
+    </a>
+    <div class="nav-right">
+      <a href="kasi_markets.html" class="nav-btn">Back to markets</a>
+      <a href="kasi_markets.html" class="nav-btn nav-btn-primary">Start trading</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Complete Guide</div>
+  <h1>How Kasi Markets works</h1>
+  <p>Everything you need to know about Africa's first prediction market — from browsing markets to placing bets to sharing your calls on X.</p>
+  <div class="hero-actions">
+    <a href="kasi_markets.html" class="hero-btn hero-btn-dark" style="text-decoration:none;color:#fff;">Open Kasi Markets</a>
+    <a href="#s1" class="hero-btn hero-btn-outline" style="text-decoration:none;color:var(--text);">Read the guide</a>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-box">
+    <div class="toc-title">In this guide</div>
+    <ol class="toc-list">
+      <li><a href="#s1"><span class="toc-num">1</span> What is a prediction market?</a></li>
+      <li><a href="#s2"><span class="toc-num">2</span> How prices work</a></li>
+      <li><a href="#s3"><span class="toc-num">3</span> Browsing markets</a></li>
+      <li><a href="#s4"><span class="toc-num">4</span> Placing a bet</a></li>
+      <li><a href="#s5"><span class="toc-num">5</span> Reading the chart</a></li>
+      <li><a href="#s6"><span class="toc-num">6</span> Sharing to X</a></li>
+      <li><a href="#s7"><span class="toc-num">7</span> The LGE 2026 hub</a></li>
+      <li><a href="#s8"><span class="toc-num">8</span> Leaderboard & receipts</a></li>
+      <li><a href="#s9"><span class="toc-num">9</span> Deposits & withdrawals</a></li>
+      <li><a href="#s10"><span class="toc-num">10</span> Responsible play</a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- GUIDE CONTENT -->
+<div class="guide">
+
+  <!-- 1 -->
+  <div class="section" id="s1">
+    <div class="section-num">1</div>
+    <h2>What is a prediction market?</h2>
+    <p class="lead">Kasi Markets is not a casino and it is not a sportsbook. It is something simpler and more powerful.</p>
+    <p>A prediction market poses a question about a real-world outcome. You take a YES or NO position. If you are right, you win. If you are wrong, you lose your stake. The price of a YES share at any moment reflects the crowd's collective view of how likely that outcome is.</p>
+    <p style="margin-top:12px;">The platform earns a flat fee on every market regardless of outcome. You are never betting against a house — you are betting against other people who disagree with you.</p>
+
+    <div class="vis">
+      <div class="vis-label">Example market</div>
+      <div class="mock-row">
+        <div class="mock-icon">🗳️</div>
+        <div>
+          <div class="mock-q">Will the ANC poll under 40% nationally in LGE 2026?</div>
+          <div class="mock-meta">R 2.41M vol &middot; 4,122 traders &middot; Source: IEC</div>
+        </div>
+        <div class="mock-btns">
+          <button class="mock-yes">Yes 57¢</button>
+          <button class="mock-no">No 43¢</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Key difference from betting:</strong> Markets cover anything — politics, economics, sport, culture, weather, celebrity. Prices shift in real time. And being right is public, provable, and shareable.
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section" id="s2">
+    <div class="section-num">2</div>
+    <h2>How prices work</h2>
+    <p class="lead">Every market has a YES price and a NO price. They always add up to R1.00.</p>
+
+    <div class="price-explain">
+      <div class="price-card">
+        <div class="label" style="color:var(--green);font-weight:600;">YES</div>
+        <div class="price" style="color:var(--green);">57¢</div>
+        <div class="label">The crowd says 57% chance</div>
+        <div class="explain">Buy at 57¢ &rarr; win R1.00 if YES</div>
+      </div>
+      <div class="price-card">
+        <div class="label" style="color:var(--red);font-weight:600;">NO</div>
+        <div class="price" style="color:var(--red);">43¢</div>
+        <div class="label">The crowd says 43% chance</div>
+        <div class="explain">Buy at 43¢ &rarr; win R1.00 if NO</div>
+      </div>
+    </div>
+
+    <p>If you think the crowd is wrong, you have an edge. Buy YES at 57¢ when you believe the true probability is higher — and if you are right, you profit the difference.</p>
+
+    <div class="callout-green callout">
+      <strong>Think of it like this:</strong> If you buy 100 YES shares at 57¢, you spend R57. If the outcome is YES, you receive R100. Your profit is R43. If the outcome is NO, you lose your R57 stake.
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section" id="s3">
+    <div class="section-num">3</div>
+    <h2>Browsing markets</h2>
+    <p class="lead">Markets are organised by category and sorted by what is trending.</p>
+
+    <ul class="steps-list">
+      <li><strong>Top nav</strong> — jump straight to Politics, Sport, Economy, or Culture using the navigation bar.</li>
+      <li><strong>Filter tabs</strong> — below the nav, toggle between Trending, New, Closing Soon, and Highest Volume to find what matters to you.</li>
+      <li><strong>Search</strong> — type any keyword (e.g. "ANC Joburg" or "Sundowns") into the search bar to find a specific market instantly.</li>
+      <li><strong>Market rows</strong> — each row shows the question, the current YES/NO prices, total volume, trader count, and close date. One glance tells you everything.</li>
+      <li><strong>LGE hub</strong> — the dedicated election hub shows every metro race in a table view with probability bars and 24h price changes.</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div class="section" id="s4">
+    <div class="section-num">4</div>
+    <h2>Placing a bet</h2>
+    <p class="lead">From zero to bet in four taps. Designed for your thumb.</p>
+
+    <div class="flow">
+      <div class="flow-step"><div class="flow-step-num">Step 1</div><div class="flow-step-text">Pick a market</div></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step"><div class="flow-step-num">Step 2</div><div class="flow-step-text">Tap Yes or No</div></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step"><div class="flow-step-num">Step 3</div><div class="flow-step-text">Enter amount</div></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step"><div class="flow-step-num">Step 4</div><div class="flow-step-text">Confirm</div></div>
+    </div>
+
+    <ul class="steps-list">
+      <li>Click any <strong>Yes</strong> or <strong>No</strong> button on a market row, or scroll to the market detail and use the order panel on the right.</li>
+      <li>Choose a preset amount (<strong>R10, R20, R50, R100</strong>) or type a custom amount. Minimum bet is R5.</li>
+      <li>See your <strong>potential return</strong> calculated instantly — the panel shows how many shares you get and what you win if your call is correct.</li>
+      <li>Tap <strong>"Buy Yes"</strong> or <strong>"Buy No"</strong> to confirm. Your position is live immediately.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Low stakes by design.</strong> A R15 bet feels like a coffee, not a gamble. Volume is the revenue model. You can bet as little as R5 on any market.
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section" id="s5">
+    <div class="section-num">5</div>
+    <h2>Reading the chart</h2>
+    <p class="lead">The probability chart shows how the crowd's view has shifted over time.</p>
+
+    <div class="vis">
+      <div class="vis-label">Probability chart — YES price over 30 days</div>
+      <svg viewBox="0 0 700 160" style="width:100%;height:160px;">
+        <line x1="0" y1="32" x2="700" y2="32" stroke="#e5e7eb" stroke-width="0.5"/>
+        <line x1="0" y1="64" x2="700" y2="64" stroke="#e5e7eb" stroke-width="0.5"/>
+        <line x1="0" y1="96" x2="700" y2="96" stroke="#e5e7eb" stroke-width="0.5"/>
+        <line x1="0" y1="128" x2="700" y2="128" stroke="#e5e7eb" stroke-width="0.5"/>
+        <text x="4" y="30" font-size="10" fill="#9ca3af" font-family="Inter">80¢</text>
+        <text x="4" y="62" font-size="10" fill="#9ca3af" font-family="Inter">60¢</text>
+        <text x="4" y="94" font-size="10" fill="#9ca3af" font-family="Inter">40¢</text>
+        <text x="4" y="126" font-size="10" fill="#9ca3af" font-family="Inter">20¢</text>
+        <defs><linearGradient id="cg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#16a34a" stop-opacity=".12"/><stop offset="100%" stop-color="#16a34a" stop-opacity="0"/></linearGradient></defs>
+        <path d="M30,110 L80,114 130,108 180,98 230,102 280,90 330,82 380,86 430,74 480,68 530,62 580,56 630,50 670,46 L670,150 L30,150 Z" fill="url(#cg)"/>
+        <path d="M30,110 L80,114 130,108 180,98 230,102 280,90 330,82 380,86 430,74 480,68 530,62 580,56 630,50 670,46" stroke="#16a34a" stroke-width="2" fill="none" stroke-linejoin="round"/>
+        <circle cx="670" cy="46" r="3.5" fill="#16a34a"/>
+      </svg>
+    </div>
+
+    <ul class="steps-list">
+      <li><strong>Green line rising</strong> = the crowd thinks YES is becoming more likely. The event is looking more probable.</li>
+      <li><strong>Green line falling</strong> = the crowd is shifting towards NO. New information is changing the consensus.</li>
+      <li><strong>Time toggles</strong> — switch between 1H, 1D, 1W, 1M, and All to see different timeframes. Use 1H for fast-moving markets on event day.</li>
+      <li><strong>Current price badge</strong> — the green pill at the end of the line shows the live YES price right now.</li>
+    </ul>
+  </div>
+
+  <!-- 6 — THE BIG ONE -->
+  <div class="section" id="s6">
+    <div class="section-num">6</div>
+    <h2>Sharing to X — the growth engine</h2>
+    <p class="lead">This is the most important feature on the platform. Every bet generates a shareable card. Every share is a free ad.</p>
+
+    <div class="vis" style="text-align:center;">
+      <div class="vis-label">Your shareable bet card</div>
+      <div class="share-mock">
+        <div class="share-mock-user"><div class="share-mock-logo">K</div> kasi.markets &middot; @thabo_m</div>
+        <div class="share-mock-q">ANC under 40% nationally in LGE 2026</div>
+        <span class="share-mock-pos">YES &middot; 57¢</span>
+        <div class="share-mock-pay">If I'm right: <strong>R 210.53</strong></div>
+        <div class="share-mock-foot">Screenshot this. Quote-tweet me in November.</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px;font-weight:700;margin:24px 0 12px;">How the X sharing flywheel works</h3>
+
+    <div class="flywheel">
+      <div class="fly-card">
+        <div class="fly-num">1. YOU BET</div>
+        <div class="fly-title">Place your call</div>
+        <div class="fly-desc">Take a YES or NO position on any market. A shareable card is generated instantly with your position, stake, and potential payout.</div>
+      </div>
+      <div class="fly-card">
+        <div class="fly-num">2. YOU SHARE</div>
+        <div class="fly-title">Post to X</div>
+        <div class="fly-desc">Hit "Share to X" — your card goes out to your followers. It shows your conviction, your stake, and what you stand to win. This is a public flex.</div>
+      </div>
+      <div class="fly-card">
+        <div class="fly-num">3. THEY ENGAGE</div>
+        <div class="fly-title">Debate erupts</div>
+        <div class="fly-desc">Your followers agree or disagree. Quote-tweets, replies, and threads generate organic reach. The debate drives new users to the market to take the opposite side.</div>
+      </div>
+      <div class="fly-card">
+        <div class="fly-num">4. RECEIPTS</div>
+        <div class="fly-title">Winners claim</div>
+        <div class="fly-desc">When the market resolves, winners come back to claim their receipts publicly. Losers get ratio'd. This is the viral moment — and it drives the next wave of sign-ups.</div>
+      </div>
+    </div>
+
+    <div class="callout-green callout">
+      <strong>Why this matters commercially:</strong> Polymarket's single biggest growth mechanic was organic sharing on X. Users shared open positions, generated debate, and drove new sign-ups with zero paid media. Kasi Markets is built around this exact loop — but tuned for Black Twitter SA, which is already the most prediction-heavy community on the platform.
+    </div>
+
+    <h3 style="font-size:16px;font-weight:700;margin:24px 0 12px;">Sharing step-by-step</h3>
+
+    <ul class="steps-list">
+      <li>After placing a bet, scroll to the <strong>"Share your position"</strong> card on the market detail page (right sidebar).</li>
+      <li>Preview your card — it shows your username, the market question, your position (YES/NO), your price, and your potential payout.</li>
+      <li>Tap <strong>"Share to X"</strong> to post directly, or <strong>"Copy link"</strong> to paste into any conversation, WhatsApp group, or thread.</li>
+      <li>Add your own commentary — your hot take is what drives the engagement. The card provides the proof.</li>
+      <li>On results day, come back and quote-tweet your original post with your winnings. <strong>This is the receipt.</strong></li>
+    </ul>
+
+    <div class="callout">
+      <strong>Pro tip:</strong> The best-performing shares on X have a strong opinion attached. Don't just share the card — add your take. "ANC is cooked in Joburg. Mark my words. R200 on it." That's what gets retweeted.
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section" id="s7">
+    <div class="section-num">7</div>
+    <h2>The LGE 2026 hub</h2>
+    <p class="lead">The SA Local Government Elections are the launch catalyst. The dedicated hub gives you every race in one place.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="val">203</div><div class="label">Days to election</div></div>
+      <div class="stat-card"><div class="val">8</div><div class="label">Metro races live</div></div>
+      <div class="stat-card"><div class="val">R 14.8M</div><div class="label">Total LGE volume</div></div>
+    </div>
+
+    <ul class="steps-list">
+      <li>Click <strong>"LGE 2026"</strong> in the nav or the LGE banner to enter the hub.</li>
+      <li>The <strong>metro board</strong> shows which party the crowd thinks wins each major city — Johannesburg, Cape Town, eThekwini, Tshwane, NMB, and Ekurhuleni.</li>
+      <li>Filter by party — <strong>ANC, DA, MK, EFF</strong> — to see only races involving a specific party.</li>
+      <li>Each row shows the live probability, 24h price change, and total volume. Click <strong>Trade</strong> to enter the market.</li>
+      <li>As election day approaches, new ward-level markets will open — giving you granular, hyper-local betting on your own neighbourhood.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Why LGE 2026 is perfect:</strong> Binary outcomes (every ward is a yes/no), weeks of campaign debate, national obsession across every demographic, and viral receipts on results day. This is the event the platform is built for.
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="section" id="s8">
+    <div class="section-num">8</div>
+    <h2>Leaderboard & receipts</h2>
+    <p class="lead">Being right is the flex. The leaderboard makes it public and permanent.</p>
+
+    <ul class="steps-list">
+      <li>The <strong>weekly leaderboard</strong> ranks traders by ROI — not just total volume. Skill is rewarded over size.</li>
+      <li>Your profile tracks your <strong>win/loss record, total profit, and best calls</strong> — a public track record anyone can verify.</li>
+      <li>When a market resolves, your winning positions are marked. Share your result card to X to <strong>claim your receipts</strong>.</li>
+      <li>Top performers earn badges and visibility. The leaderboard is designed to reward the community's sharpest minds — and give them a reason to keep sharing.</li>
+    </ul>
+  </div>
+
+  <!-- 9 -->
+  <div class="section" id="s9">
+    <div class="section-num">9</div>
+    <h2>Deposits & withdrawals</h2>
+    <p class="lead">Deposit-to-bet in under 60 seconds. Payouts hit your account instantly.</p>
+
+    <ul class="steps-list">
+      <li>Tap <strong>Deposit</strong> in the top-right corner to add funds.</li>
+      <li>Choose your method: <strong>PayShap</strong> (instant), <strong>Capitec Pay</strong> (instant), or <strong>Standard EFT</strong>.</li>
+      <li>Minimum deposit is <strong>R10</strong>. No maximum for verified accounts.</li>
+      <li>Withdrawals are processed the same way — select an amount, confirm, and funds arrive in your bank account within minutes via PayShap or same-day EFT.</li>
+      <li>Your balance is shown in the nav bar at all times. Winnings from resolved markets are added to your balance automatically.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Friction kills conversion.</strong> The entire deposit-to-first-bet journey is designed to be under 60 seconds. Any slower and you lose the impulse that brought the user to the page.
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="section" id="s10">
+    <div class="section-num">10</div>
+    <h2>Responsible play</h2>
+    <p class="lead">Kasi Markets is designed for entertainment and informed opinion. Play responsibly.</p>
+
+    <ul class="steps-list">
+      <li><strong>Daily limits</strong> — set a maximum daily spend that cannot be exceeded. Once hit, betting is paused until the next day.</li>
+      <li><strong>Cool-off periods</strong> — take a 24-hour, 7-day, or 30-day break from betting at any time.</li>
+      <li><strong>Self-exclusion</strong> — permanently exclude your account from the platform if needed.</li>
+      <li><strong>Age verification</strong> — you must be 18+ to use Kasi Markets. ID verification is required during sign-up.</li>
+      <li><strong>Transparent resolution</strong> — every market has a named, independent resolution source. No ambiguity, no disputes.</li>
+    </ul>
+
+    <p style="margin-top:16px;font-size:13px;color:var(--muted);">Kasi Markets is a licensed fixed-odds operator regulated by the Western Cape Gambling & Racing Board. Licence #FOB-WC-2024-112. If you or someone you know has a gambling problem, call the South African Responsible Gambling Foundation helpline: 0800 006 008.</p>
+  </div>
+
+</div>
+
+<!-- BOTTOM CTA -->
+<div style="max-width:800px;margin:0 auto;padding:48px 24px;text-align:center;">
+  <div style="background:var(--bg2);border-radius:16px;padding:40px;">
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:8px;">Ready to make your first call?</h2>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:20px;">Browse live markets, place a bet from R5, and share your position to X.</p>
+    <a href="kasi_markets.html" style="display:inline-block;background:var(--text);color:#fff;padding:12px 28px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;">Open Kasi Markets</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="guide-footer">
+  <p>&copy; 2026 KasiMarkets (Pty) Ltd &middot; <a href="kasi_markets.html">Markets</a> &middot; Responsible play &middot; Licence &middot; 18+. T&Cs apply.</p>
+</div>
+
+</body>
+</html>
