@@ -130,16 +130,18 @@ input{font-family:inherit;}
 .order-btn.green{background:var(--green);}
 .order-btn.red{background:var(--red);}
 
-/* Share card */
+/* Share card — premium dark design */
 .share-card{border:1px solid var(--border);border-radius:12px;padding:20px;background:#fff;}
-.share-inner{border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;}
-.share-user{font-size:12px;color:var(--muted);margin-bottom:8px;}
-.share-q{font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.3;}
-.share-pos{display:inline-block;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;}
-.share-pos.yes{background:var(--green-bg);color:var(--green);}
-.share-payout{font-size:13px;color:var(--muted);margin-top:8px;}
-.share-payout strong{color:var(--green);font-weight:600;}
-.share-foot{font-size:11px;color:var(--light);margin-top:8px;}
+.share-inner{background:linear-gradient(145deg,#0d1117 0%,#111827 100%);border:1px solid #1e293b;border-radius:10px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;color:#fff;}
+.share-inner::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:radial-gradient(circle at top right,rgba(74,222,128,.08),transparent);pointer-events:none;}
+.share-user{font-size:12px;color:#6b7280;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.share-user-logo{width:18px;height:18px;background:#fff;border-radius:4px;display:grid;place-items:center;color:#111;font-size:9px;font-weight:800;}
+.share-q{font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.3;color:#fff;}
+.share-pos{display:inline-block;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:.02em;}
+.share-pos.yes{background:#16a34a;color:#fff;}
+.share-payout{font-size:13px;color:#9ca3af;margin-top:8px;}
+.share-payout strong{color:#4ade80;font-weight:700;}
+.share-foot{font-size:11px;color:#6b7280;margin-top:10px;font-style:italic;border-top:1px solid #1e293b;padding-top:8px;}
 .share-btns{display:flex;gap:8px;}
 .share-btns button{flex:1;padding:10px;border-radius:8px;font-size:13px;font-weight:600;}
 .share-btns .copy{background:var(--bg2);border:1px solid var(--border);color:var(--text);}
@@ -203,6 +205,7 @@ input{font-family:inherit;}
       Kasi
     </a>
     <div class="nav-links">
+      <a href="index.html">Home</a>
       <a class="active" href="#">Markets</a>
       <a href="#">LGE 2026</a>
       <a href="#">Sport</a>
@@ -564,15 +567,15 @@ input{font-family:inherit;}
         <button class="order-btn green">Buy Yes</button>
       </div>
 
-      <!-- Share card -->
+      <!-- Share card — premium dark -->
       <div class="share-card">
         <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:10px;">Share your position</div>
         <div class="share-inner">
-          <div class="share-user">kasi.markets &middot; @thabo_m</div>
+          <div class="share-user"><span class="share-user-logo">K</span> kasi.markets &middot; @thabo_m</div>
           <div class="share-q">ANC under 40% nationally in LGE 2026</div>
-          <span class="share-pos yes">YES &middot; 57¢</span>
+          <span class="share-pos yes">YES &middot; 57&#162;</span>
           <div class="share-payout">If I'm right: <strong>R 210.53</strong></div>
-          <div class="share-foot">Screenshot this. Quote-tweet me in November.</div>
+          <div class="share-foot">Mark my words. Quote-tweet me in November &#128293;</div>
         </div>
         <div class="share-btns">
           <button class="copy">Copy link</button>
@@ -684,7 +687,7 @@ input{font-family:inherit;}
 <div class="tour-welcome" id="tourWelcome">
   <div class="tour-welcome-icon">K</div>
   <h2>Welcome to Kasi Markets</h2>
-  <p>Africa's first regulated prediction market. Take a 60-second tour to learn how to browse markets, place bets, and share your calls to X.</p>
+  <p>Africa's first regulated prediction market — built for the community that already predicts everything on X. Take a 60-second tour to learn how to bet, share, and claim your receipts.</p>
   <div class="tour-welcome-features">
     <div class="tour-welcome-feat"><span>&#10003;</span> Browse live markets</div>
     <div class="tour-welcome-feat"><span>&#10003;</span> Place YES / NO bets</div>
@@ -756,8 +759,8 @@ input{font-family:inherit;}
     },
     {
       target: '.share-card',
-      title: 'Share to X — the growth engine',
-      desc: 'This is the most important feature. Every bet generates a <strong>shareable card</strong> with your position, your stake, and your potential payout. Hit <strong>"Share to X"</strong> and your followers see your call. When you\'re right — you come back to claim receipts publicly. <strong>This is how Kasi Markets grows: every share is a free ad reaching a targeted, high-intent audience.</strong>',
+      title: 'Share to X — the unfair advantage',
+      desc: 'This is the most important feature on the platform. Every bet generates a <strong>premium dark share card</strong> — screenshot-worthy, designed to go viral. Hit <strong>"Share to X"</strong> and your followers see the take, the conviction, and the money behind it. When you\'re right, come back and claim your receipts publicly. <strong>Built for our "mark my words" culture. Every share is a free ad. This is how Kasi Markets grows.</strong>',
       position: 'left',
     },
     {
