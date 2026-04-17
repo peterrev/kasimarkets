@@ -492,210 +492,306 @@ button{cursor:pointer;font-family:inherit;}
 </div>
 
 <!-- ═══════════════════════════════════════════════
-     INTRO — cinematic white concept walkthrough
+     INTRO — Twitter-anchored click-through cinematic
      ═══════════════════════════════════════════════ -->
 <style>
 /* Overlay */
-.cin{position:fixed;inset:0;z-index:10000;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .9s cubic-bezier(.4,0,.2,1),visibility .9s;}
+.cin{position:fixed;inset:0;z-index:10000;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;transition:opacity 1.1s cubic-bezier(.22,1,.36,1),visibility 1.1s;-webkit-font-smoothing:antialiased;}
 .cin.done{opacity:0;visibility:hidden;pointer-events:none;}
 
-/* Progress */
-.cin-bar{position:fixed;top:0;left:0;height:3px;z-index:10002;background:linear-gradient(90deg,#16a34a,#4ade80);width:0;transition:width .5s cubic-bezier(.4,0,.2,1);}
+/* Subtle gradient backdrop on top */
+.cin::before{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 50% 0%,rgba(29,155,240,.06),transparent 60%),radial-gradient(900px 600px at 50% 100%,rgba(22,163,74,.05),transparent 60%);pointer-events:none;}
+
+/* Progress dots */
+.cin-prog{position:fixed;top:28px;left:50%;transform:translateX(-50%);z-index:10002;display:flex;gap:8px;}
+.cin-prog-dot{width:28px;height:4px;border-radius:4px;background:#e5e7eb;transition:background .5s cubic-bezier(.22,1,.36,1),width .5s cubic-bezier(.22,1,.36,1);}
+.cin-prog-dot.active{background:#111;width:44px;}
+.cin-prog-dot.done{background:#16a34a;}
 
 /* Skip */
-.cin-skip{position:fixed;bottom:36px;right:36px;z-index:10002;background:rgba(0,0,0,.04);border:1px solid #e5e7eb;color:#9ca3af;padding:9px 20px;border-radius:100px;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;}
-.cin-skip:hover{background:rgba(0,0,0,.08);color:#111;}
+.cin-skip{position:fixed;bottom:32px;right:32px;z-index:10002;background:rgba(0,0,0,.03);border:1px solid #e5e7eb;color:#9ca3af;padding:9px 20px;border-radius:100px;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .25s;}
+.cin-skip:hover{background:rgba(0,0,0,.06);color:#111;border-color:#d1d5db;}
 
-/* Green energy particles */
+/* Click hint */
+.cin-hint{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);z-index:10002;font-size:12px;color:#9ca3af;font-weight:500;letter-spacing:.02em;display:flex;align-items:center;gap:8px;opacity:0;animation:hintFade .6s .9s forwards;pointer-events:none;user-select:none;}
+.cin-hint .arw{font-size:14px;animation:hintPulse 1.6s ease-in-out infinite;}
+@keyframes hintFade{to{opacity:1;}}
+@keyframes hintPulse{0%,100%{transform:translateX(0);opacity:.6;}50%{transform:translateX(4px);opacity:1;}}
+
+/* Floating background noise — twitter-blue + green embers */
 .cin-dots{position:fixed;inset:0;z-index:10000;pointer-events:none;overflow:hidden;}
 .cin-dot{position:absolute;border-radius:50%;opacity:0;}
-@keyframes dotUp{0%{opacity:0;transform:translateY(0) scale(0);}15%{opacity:.5;}100%{opacity:0;transform:translateY(-260px) scale(1.2);}}
-@keyframes dotDrift{0%{opacity:0;transform:translate(0,0) scale(0);}20%{opacity:.35;}100%{opacity:0;transform:translate(40px,-180px) scale(1);}}
+@keyframes dotUp{0%{opacity:0;transform:translateY(0) scale(0);}15%{opacity:.45;}100%{opacity:0;transform:translateY(-300px) scale(1.2);}}
+@keyframes dotDrift{0%{opacity:0;transform:translate(0,0) scale(0);}20%{opacity:.3;}100%{opacity:0;transform:translate(40px,-200px) scale(1);}}
 
-/* Slides */
-.cin-wrap{position:relative;width:100%;max-width:720px;padding:0 28px;text-align:center;}
-.cin-s{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;will-change:opacity,transform;}
-
-/* Transitions */
-.cin-s.enter{animation:slideIn .65s cubic-bezier(.22,1,.36,1) forwards;}
-.cin-s.exit{animation:slideOut .5s cubic-bezier(.55,0,1,.45) forwards;}
-@keyframes slideIn{from{opacity:0;transform:scale(.92) translateY(24px);}to{opacity:1;transform:scale(1) translateY(0);}}
-@keyframes slideOut{from{opacity:1;transform:scale(1) translateY(0);}to{opacity:0;transform:scale(1.04) translateY(-20px);}}
-
-/* ── Slide 0: Logo burst ── */
-.cin-logo{width:100px;height:100px;background:#111;border-radius:22px;display:grid;place-items:center;color:#fff;font-size:52px;font-weight:900;margin:0 auto 0;position:relative;box-shadow:0 0 0 0 rgba(22,163,74,.3);}
-.cin-logo.pulse{animation:logoBurst 1.8s cubic-bezier(.4,0,.2,1) forwards;}
-@keyframes logoBurst{
-  0%{transform:scale(0);opacity:0;box-shadow:0 0 0 0 rgba(22,163,74,.4);}
-  40%{transform:scale(1.1);opacity:1;box-shadow:0 0 0 30px rgba(22,163,74,.08);}
-  60%{transform:scale(.97);}
-  80%{transform:scale(1.02);box-shadow:0 0 60px 10px rgba(22,163,74,.06);}
-  100%{transform:scale(1);box-shadow:0 4px 40px rgba(0,0,0,.08);}
+/* Slides — single continuous cross-fade transition, no mid-state snap */
+.cin-wrap{position:relative;width:100%;max-width:760px;padding:0 28px;text-align:center;min-height:520px;}
+.cin-s{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;
+  transform:translateY(14px) scale(.985);
+  pointer-events:none;
+  transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1);
+  will-change:opacity,transform;
 }
-.cin-brand{font-size:38px;font-weight:900;color:#111;letter-spacing:-.03em;margin-top:24px;opacity:0;}
-.cin-brand.show{animation:brandIn .6s .3s cubic-bezier(.22,1,.36,1) forwards;}
-@keyframes brandIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-.cin-tagline{font-size:14px;color:#9ca3af;font-weight:500;margin-top:8px;opacity:0;}
-.cin-tagline.show{animation:brandIn .5s .6s cubic-bezier(.22,1,.36,1) forwards;}
+.cin-s.active{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+  transition:opacity .85s cubic-bezier(.22,1,.36,1),transform .85s cubic-bezier(.22,1,.36,1);
+  transition-delay:.12s; /* gives old slide a head start fading out */
+}
+.cin-s.leaving{
+  opacity:0;
+  transform:translateY(-12px) scale(1.01);
+  pointer-events:none;
+}
 
-/* ── Slide 1: Insight ── */
-.cin-h{font-size:44px;font-weight:900;color:#111;line-height:1.08;letter-spacing:-.035em;margin-bottom:16px;}
-.cin-sub{font-size:17px;color:#6b7280;line-height:1.6;max-width:500px;margin:0 auto;}
-.cin-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px;}
-.cin-tag{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;border:1px solid #e5e7eb;color:#374151;background:#fff;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s;}
-.cin-tag.pop{opacity:1;transform:translateY(0);}
+/* Typography */
+.cin-h{font-size:46px;font-weight:900;color:#111;line-height:1.08;letter-spacing:-.035em;margin-bottom:16px;}
+.cin-sub{font-size:17px;color:#6b7280;line-height:1.6;max-width:520px;margin:0 auto;}
+.cin-kicker{font-size:12px;font-weight:700;color:#1d9bf0;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;}
 
-/* ── Slide 2: Product — market card ── */
-.cin-mcard{background:#fff;border:2px solid #e5e7eb;border-radius:16px;padding:24px;max-width:380px;margin:24px auto 0;text-align:left;box-shadow:0 8px 40px rgba(0,0,0,.06);}
-.cin-mcard-top{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+/* ── Slide 0: Logo ── */
+.cin-logo{width:104px;height:104px;background:#111;border-radius:24px;display:grid;place-items:center;color:#fff;font-size:54px;font-weight:900;margin:0 auto;position:relative;box-shadow:0 0 0 0 rgba(22,163,74,.3);}
+.cin-logo.pulse{animation:logoBurst 1.7s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes logoBurst{
+  0%{transform:scale(0) rotate(-8deg);opacity:0;box-shadow:0 0 0 0 rgba(22,163,74,.5);}
+  45%{transform:scale(1.08) rotate(0deg);opacity:1;box-shadow:0 0 0 30px rgba(22,163,74,.08);}
+  65%{transform:scale(.97);}
+  85%{transform:scale(1.02);box-shadow:0 0 80px 12px rgba(22,163,74,.08);}
+  100%{transform:scale(1);box-shadow:0 6px 44px rgba(0,0,0,.08);}
+}
+.cin-brand{font-size:40px;font-weight:900;color:#111;letter-spacing:-.03em;margin-top:22px;opacity:0;}
+.cin-brand.show{animation:elIn .7s .3s cubic-bezier(.22,1,.36,1) forwards;}
+@keyframes elIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.cin-tagline{font-size:14px;color:#6b7280;font-weight:500;margin-top:10px;opacity:0;max-width:440px;text-align:center;}
+.cin-tagline.show{animation:elIn .6s .6s cubic-bezier(.22,1,.36,1) forwards;}
+
+/* ── Slide 1: Twitter feed — live conversations ── */
+.cin-feed{position:relative;width:100%;max-width:480px;height:340px;margin:28px auto 0;}
+.cin-tweet{position:absolute;left:0;right:0;background:#fff;border:1px solid #eef0f3;border-radius:14px;padding:14px 16px;text-align:left;box-shadow:0 6px 24px rgba(0,0,0,.04);opacity:0;transform:translateY(40px) scale(.95);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1),top .8s cubic-bezier(.22,1,.36,1);}
+.cin-tweet.in{opacity:1;transform:translateY(0) scale(1);}
+.cin-tw-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.cin-tw-av{width:36px;height:36px;border-radius:50%;background:#dbeafe;color:#1d4ed8;display:grid;place-items:center;font-size:13px;font-weight:800;flex-shrink:0;}
+.cin-tw-name{font-size:14px;font-weight:700;color:#111;}
+.cin-tw-handle{font-size:13px;color:#6b7280;}
+.cin-tw-body{font-size:14px;color:#111;line-height:1.45;}
+.cin-tw-foot{display:flex;gap:18px;margin-top:8px;font-size:12px;color:#9ca3af;}
+.cin-tw-foot span{display:flex;align-items:center;gap:4px;}
+.cin-x-icon{margin-left:auto;font-size:15px;color:#111;font-weight:900;}
+
+/* ── Slide 2: Tweet → market morph ── */
+.cin-morph{position:relative;width:100%;max-width:440px;margin:28px auto 0;min-height:260px;}
+.cin-morph-tweet,.cin-morph-market{position:absolute;inset:0;margin:0 auto;transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1);}
+.cin-morph-tweet{background:#fff;border:1px solid #eef0f3;border-radius:14px;padding:18px;text-align:left;box-shadow:0 8px 30px rgba(0,0,0,.05);opacity:1;transform:scale(1) rotateX(0deg);}
+.cin-morph-tweet.morph{opacity:0;transform:scale(.94) rotateX(12deg);}
+.cin-morph-market{opacity:0;transform:scale(1.06) rotateX(-8deg);background:#fff;border:2px solid #e5e7eb;border-radius:16px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,.08);text-align:left;}
+.cin-morph-market.morph{opacity:1;transform:scale(1) rotateX(0deg);}
+.cin-mcard-top{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
 .cin-mcard-logo{width:28px;height:28px;background:#111;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:14px;font-weight:800;}
 .cin-mcard-site{font-size:12px;color:#9ca3af;font-weight:500;}
-.cin-mcard-q{font-size:16px;font-weight:700;color:#111;line-height:1.3;margin-bottom:16px;}
+.cin-mcard-q{font-size:16px;font-weight:700;color:#111;line-height:1.3;margin-bottom:14px;}
 .cin-mcard-btns{display:flex;gap:8px;}
 .cin-mcard-btn{flex:1;padding:12px;border-radius:10px;text-align:center;font-weight:700;font-size:14px;border:none;cursor:default;}
 .cin-mcard-yes{background:#dcfce7;color:#16a34a;}
 .cin-mcard-no{background:#fee2e2;color:#dc2626;}
-.cin-mcard-price{font-size:13px;color:#9ca3af;text-align:center;margin-top:12px;}
+.cin-mcard-price{font-size:12px;color:#9ca3af;text-align:center;margin-top:10px;}
 .cin-mcard-price b{color:#16a34a;}
-/* Price tick animation */
-.cin-mcard-btn.tick{animation:priceTick .3s ease;}
+.cin-mcard-btn.tick{animation:priceTick .28s ease;}
 @keyframes priceTick{0%{transform:scale(1);}50%{transform:scale(1.06);}100%{transform:scale(1);}}
 
-/* ── Slide 3: Flywheel ── */
-.cin-flow{display:flex;align-items:center;justify-content:center;gap:0;margin:28px auto 0;max-width:600px;flex-wrap:wrap;}
-.cin-flow-step{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:110px;opacity:0;transform:translateX(-10px);}
-.cin-flow-step.show{opacity:1;transform:translateX(0);transition:opacity .4s,transform .4s;}
-.cin-flow-icon{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:22px;}
+/* ── Slide 3: Flywheel back to Twitter ── */
+.cin-flow{display:flex;align-items:center;justify-content:center;gap:0;margin:28px auto 0;max-width:640px;flex-wrap:wrap;}
+.cin-flow-step{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:110px;opacity:0;transform:translateY(10px);}
+.cin-flow-step.show{opacity:1;transform:translateY(0);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);}
+.cin-flow-icon{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;font-size:22px;font-weight:900;}
 .cin-flow-label{font-size:12px;font-weight:700;color:#111;}
+.cin-flow-sub{font-size:10px;color:#9ca3af;font-weight:500;}
 .cin-flow-arrow{font-size:20px;color:#d1d5db;padding:0 4px;opacity:0;}
-.cin-flow-arrow.show{opacity:1;transition:opacity .3s;}
+.cin-flow-arrow.show{opacity:1;transition:opacity .4s;}
 
-/* Share card flies */
-.cin-flycard{position:absolute;width:200px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,.1);opacity:0;pointer-events:none;text-align:left;font-size:11px;z-index:2;}
-.cin-flycard.fly{animation:cardFly 1.2s cubic-bezier(.22,1,.36,1) forwards;}
-@keyframes cardFly{0%{opacity:0;transform:translate(0,0) scale(.8) rotate(-2deg);}30%{opacity:1;transform:translate(30px,-20px) scale(1) rotate(0deg);}70%{opacity:1;transform:translate(60px,-60px) scale(.95) rotate(1deg);}100%{opacity:0;transform:translate(120px,-100px) scale(.85) rotate(2deg);}}
-
-/* ── Slide 4: Payoff ── */
-.cin-payout{margin:24px auto 0;text-align:center;}
-.cin-check{width:64px;height:64px;border-radius:50%;background:#dcfce7;display:grid;place-items:center;margin:0 auto 16px;font-size:28px;color:#16a34a;transform:scale(0);}
-.cin-check.pop{animation:checkPop .5s cubic-bezier(.22,1,.36,1) forwards;}
-@keyframes checkPop{from{transform:scale(0) rotate(-20deg);}to{transform:scale(1) rotate(0deg);}}
-.cin-amount{font-size:42px;font-weight:900;color:#16a34a;letter-spacing:-.02em;opacity:0;transform:translateY(10px);}
-.cin-amount.show{animation:brandIn .5s .2s cubic-bezier(.22,1,.36,1) forwards;}
-.cin-paylabel{font-size:13px;color:#9ca3af;margin-top:4px;opacity:0;}
-.cin-paylabel.show{animation:brandIn .4s .4s cubic-bezier(.22,1,.36,1) forwards;}
-
-/* ── Slide 5: CTA ── */
-.cin-cta-btn{display:inline-flex;align-items:center;gap:10px;background:#111;color:#fff;padding:18px 36px;border-radius:14px;font-size:17px;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:'Inter',sans-serif;}
-.cin-cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.15);}
+/* ── Slide 4: Receipt tweet (payout) ── */
+.cin-receipt{position:relative;width:100%;max-width:440px;margin:24px auto 0;background:#fff;border:1px solid #eef0f3;border-radius:16px;padding:18px 20px;box-shadow:0 12px 40px rgba(0,0,0,.08);text-align:left;opacity:0;transform:translateY(14px);}
+.cin-receipt.show{opacity:1;transform:translateY(0);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);}
+.cin-receipt-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.cin-receipt-av{width:40px;height:40px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-weight:900;font-size:15px;}
+.cin-receipt-name{font-size:14px;font-weight:800;color:#111;}
+.cin-receipt-handle{font-size:12px;color:#6b7280;}
+.cin-receipt-body{font-size:14px;color:#111;line-height:1.5;}
+.cin-receipt-embed{margin-top:10px;background:#f7f8fa;border:1px solid #e5e7eb;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;}
+.cin-receipt-embed-amt{font-size:24px;font-weight:900;color:#16a34a;letter-spacing:-.02em;}
+.cin-receipt-embed-lbl{font-size:12px;color:#6b7280;}
+.cin-receipt-foot{display:flex;gap:18px;margin-top:10px;font-size:12px;color:#9ca3af;}
+.cin-cta-btn{display:inline-flex;align-items:center;gap:10px;background:#111;color:#fff;padding:16px 32px;border-radius:14px;font-size:16px;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:'Inter',sans-serif;margin-top:22px;opacity:0;}
+.cin-cta-btn.show{animation:elIn .6s .3s cubic-bezier(.22,1,.36,1) forwards;}
+.cin-cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.18);}
 
 @media(max-width:600px){
   .cin-h{font-size:30px;}
   .cin-sub{font-size:15px;}
-  .cin-logo{width:76px;height:76px;font-size:40px;border-radius:18px;}
+  .cin-logo{width:78px;height:78px;font-size:40px;border-radius:18px;}
   .cin-brand{font-size:28px;}
-  .cin-mcard{max-width:320px;padding:18px;}
+  .cin-morph{max-width:320px;}
+  .cin-feed{max-width:320px;height:340px;}
   .cin-flow{gap:4px;}
   .cin-flow-step{min-width:80px;}
-  .cin-amount{font-size:32px;}
+  .cin-receipt{max-width:320px;padding:14px;}
   .cin-skip{bottom:20px;right:20px;}
+  .cin-hint{bottom:20px;}
+  .cin-prog{top:20px;}
 }
 </style>
 
 <!-- Intro overlay -->
 <div class="cin" id="cin">
-  <div class="cin-bar" id="cinBar"></div>
+  <div class="cin-prog" id="cinProg">
+    <div class="cin-prog-dot"></div>
+    <div class="cin-prog-dot"></div>
+    <div class="cin-prog-dot"></div>
+    <div class="cin-prog-dot"></div>
+    <div class="cin-prog-dot"></div>
+  </div>
   <div class="cin-dots" id="cinDots"></div>
 
   <div class="cin-wrap">
-    <!-- 0: Logo burst -->
+
+    <!-- 0: Logo + Twitter anchor -->
     <div class="cin-s" id="cs0">
       <div class="cin-logo" id="cinLogo">K</div>
       <div class="cin-brand" id="cinBrand">Kasi Markets</div>
-      <div class="cin-tagline" id="cinTag">Africa's first regulated prediction market</div>
+      <div class="cin-tagline" id="cinTag">Every day, Twitter debates the future of South Africa.<br/>We turned that into a market.</div>
     </div>
 
-    <!-- 1: Insight -->
+    <!-- 1: Twitter feed — live debate -->
     <div class="cin-s" id="cs1">
-      <div class="cin-h">Everyone has an opinion.<br/>Every day is a debate.</div>
-      <div class="cin-sub">Strong opinions. Loud arguments. Bold predictions.</div>
-      <div class="cin-tags" id="cinTags">
-        <span class="cin-tag">Elections</span>
-        <span class="cin-tag">Sport</span>
-        <span class="cin-tag">The Rand</span>
-        <span class="cin-tag">Load-shedding</span>
-        <span class="cin-tag">Culture</span>
-        <span class="cin-tag">Eskom</span>
-        <span class="cin-tag">PSL</span>
+      <div class="cin-kicker">The timeline, every single day</div>
+      <div class="cin-h">It's all a debate.</div>
+      <div class="cin-sub">Elections. Sport. The rand. Load-shedding. The crowd already has opinions — they just post them on X.</div>
+      <div class="cin-feed" id="cinFeed">
+        <div class="cin-tweet" data-t="0" style="top:0;">
+          <div class="cin-tw-top">
+            <div class="cin-tw-av" style="background:#fee2e2;color:#dc2626;">L</div>
+            <div><div class="cin-tw-name">Lerato M.</div><div class="cin-tw-handle">@lerato_calls &middot; 2m</div></div>
+            <div class="cin-x-icon">&#120143;</div>
+          </div>
+          <div class="cin-tw-body">ANC won't crack 40% nationally. Mark my words.</div>
+          <div class="cin-tw-foot"><span>&#128172; 842</span><span>&#128257; 2.1k</span><span>&#10084;&#65039; 5.3k</span></div>
+        </div>
+        <div class="cin-tweet" data-t="1" style="top:120px;">
+          <div class="cin-tw-top">
+            <div class="cin-tw-av" style="background:#fef3c7;color:#b45309;">B</div>
+            <div><div class="cin-tw-name">Boet Quant</div><div class="cin-tw-handle">@boet_quant &middot; 1m</div></div>
+            <div class="cin-x-icon">&#120143;</div>
+          </div>
+          <div class="cin-tw-body">Sundowns 7-peat is a lock. Easiest bet of my life.</div>
+          <div class="cin-tw-foot"><span>&#128172; 314</span><span>&#128257; 980</span><span>&#10084;&#65039; 2.8k</span></div>
+        </div>
+        <div class="cin-tweet" data-t="2" style="top:240px;">
+          <div class="cin-tw-top">
+            <div class="cin-tw-av" style="background:#dbeafe;color:#1d4ed8;">S</div>
+            <div><div class="cin-tw-name">Sbu</div><div class="cin-tw-handle">@sbu_sport &middot; now</div></div>
+            <div class="cin-x-icon">&#120143;</div>
+          </div>
+          <div class="cin-tw-body">Rand under R18 by December? Never happening.</div>
+          <div class="cin-tw-foot"><span>&#128172; 512</span><span>&#128257; 1.4k</span><span>&#10084;&#65039; 3.1k</span></div>
+        </div>
       </div>
     </div>
 
-    <!-- 2: Product -->
+    <!-- 2: Tweet → Market morph -->
     <div class="cin-s" id="cs2">
-      <div class="cin-h">Now you can bet on it</div>
-      <div class="cin-sub">From just R5. Prices move in real time.</div>
-      <div class="cin-mcard" id="cinCard">
-        <div class="cin-mcard-top">
-          <div class="cin-mcard-logo">K</div>
-          <div class="cin-mcard-site">kasi.markets</div>
+      <div class="cin-kicker">Talk is cheap. Conviction is not.</div>
+      <div class="cin-h">Turn the tweet into a trade.</div>
+      <div class="cin-sub">We took the loudest debates on the timeline and priced them. Real money. Real stakes.</div>
+      <div class="cin-morph">
+        <div class="cin-morph-tweet" id="cinMorphTweet">
+          <div class="cin-tw-top">
+            <div class="cin-tw-av" style="background:#fee2e2;color:#dc2626;">L</div>
+            <div><div class="cin-tw-name">Lerato M.</div><div class="cin-tw-handle">@lerato_calls</div></div>
+            <div class="cin-x-icon">&#120143;</div>
+          </div>
+          <div class="cin-tw-body" style="font-size:15px;">ANC won't crack 40% nationally. Mark my words.</div>
+          <div class="cin-tw-foot" style="margin-top:10px;"><span>&#128172; 842</span><span>&#128257; 2.1k</span><span>&#10084;&#65039; 5.3k</span></div>
         </div>
-        <div class="cin-mcard-q">Will the ANC poll under 40% nationally in LGE 2026?</div>
-        <div class="cin-mcard-btns">
-          <div class="cin-mcard-btn cin-mcard-yes" id="cinYes">Yes 57&#162;</div>
-          <div class="cin-mcard-btn cin-mcard-no" id="cinNo">No 43&#162;</div>
+        <div class="cin-morph-market" id="cinMorphMarket">
+          <div class="cin-mcard-top">
+            <div class="cin-mcard-logo">K</div>
+            <div class="cin-mcard-site">kasi.markets</div>
+            <div style="margin-left:auto;font-size:11px;color:#16a34a;font-weight:700;">&#9679; LIVE</div>
+          </div>
+          <div class="cin-mcard-q">Will the ANC poll under 40% nationally in LGE 2026?</div>
+          <div class="cin-mcard-btns">
+            <div class="cin-mcard-btn cin-mcard-yes" id="cinYes">Yes 57&#162;</div>
+            <div class="cin-mcard-btn cin-mcard-no" id="cinNo">No 43&#162;</div>
+          </div>
+          <div class="cin-mcard-price">Potential payout: <b>R 175.44</b></div>
         </div>
-        <div class="cin-mcard-price">Potential payout: <b>R 175.44</b></div>
       </div>
     </div>
 
-    <!-- 3: Flywheel -->
+    <!-- 3: Flywheel — Twitter → Kasi → Twitter -->
     <div class="cin-s" id="cs3">
-      <div class="cin-h">Share. Debate. Grow.</div>
-      <div class="cin-sub">Every bet creates a shareable card. Every share sparks a debate.</div>
+      <div class="cin-kicker">The loop</div>
+      <div class="cin-h">Tweet. Bet. Debate. Repeat.</div>
+      <div class="cin-sub">Every bet creates a shareable card. Post it back to X. Your timeline becomes the growth engine.</div>
       <div class="cin-flow" id="cinFlow">
         <div class="cin-flow-step" data-d="0">
-          <div class="cin-flow-icon" style="background:#dcfce7;">&#128176;</div>
-          <div class="cin-flow-label">Place your call</div>
+          <div class="cin-flow-icon" style="background:#e7f3ff;color:#1d9bf0;">&#120143;</div>
+          <div class="cin-flow-label">See the debate</div>
+          <div class="cin-flow-sub">on X</div>
         </div>
         <div class="cin-flow-arrow" data-d="1">&rarr;</div>
         <div class="cin-flow-step" data-d="2">
-          <div class="cin-flow-icon" style="background:#f3e8ff;">&#128640;</div>
-          <div class="cin-flow-label">Share it</div>
+          <div class="cin-flow-icon" style="background:#dcfce7;">&#128176;</div>
+          <div class="cin-flow-label">Place your call</div>
+          <div class="cin-flow-sub">from R5</div>
         </div>
         <div class="cin-flow-arrow" data-d="3">&rarr;</div>
         <div class="cin-flow-step" data-d="4">
-          <div class="cin-flow-icon" style="background:#fee2e2;">&#128293;</div>
-          <div class="cin-flow-label">Spark debate</div>
+          <div class="cin-flow-icon" style="background:#e7f3ff;color:#1d9bf0;">&#128228;</div>
+          <div class="cin-flow-label">Share the card</div>
+          <div class="cin-flow-sub">back to X</div>
         </div>
         <div class="cin-flow-arrow" data-d="5">&rarr;</div>
         <div class="cin-flow-step" data-d="6">
-          <div class="cin-flow-icon" style="background:#dcfce7;">&#10003;</div>
-          <div class="cin-flow-label">Get paid</div>
+          <div class="cin-flow-icon" style="background:#fee2e2;">&#128293;</div>
+          <div class="cin-flow-label">Spark more debate</div>
+          <div class="cin-flow-sub">new traders join</div>
         </div>
-      </div>
-      <div style="display:flex;justify-content:center;gap:10px;margin-top:24px;" id="cinPlats">
-        <div class="cin-tag" style="border-color:#000;color:#000;font-weight:700;">&#120143; X</div>
-        <div class="cin-tag" style="border-color:#25D366;color:#25D366;font-weight:700;">WhatsApp</div>
-        <div class="cin-tag" style="border-color:#E1306C;color:#E1306C;font-weight:700;">Instagram</div>
-        <div class="cin-tag" style="border-color:#111;color:#111;font-weight:700;">TikTok</div>
       </div>
     </div>
 
-    <!-- 4: Payoff -->
+    <!-- 4: Receipt tweet + payout -->
     <div class="cin-s" id="cs4">
-      <div class="cin-payout">
-        <div class="cin-check" id="cinCheck">&#10003;</div>
-        <div class="cin-amount" id="cinAmt">+ R 175.44</div>
-        <div class="cin-paylabel" id="cinPayL">Paid instantly via PayShap, Capitec, or MoMo</div>
+      <div class="cin-kicker">Receipts</div>
+      <div class="cin-h">Mark your words.<br/>Then cash them.</div>
+      <div class="cin-sub">When the outcome lands, you post the receipt. The conversation comes back to Twitter — with proof.</div>
+      <div class="cin-receipt" id="cinReceipt">
+        <div class="cin-receipt-top">
+          <div class="cin-receipt-av">L</div>
+          <div><div class="cin-receipt-name">Lerato M.</div><div class="cin-receipt-handle">@lerato_calls &middot; just now</div></div>
+          <div class="cin-x-icon" style="margin-left:auto;">&#120143;</div>
+        </div>
+        <div class="cin-receipt-body">Told y'all. I warned you. 🧾</div>
+        <div class="cin-receipt-embed">
+          <div>
+            <div class="cin-receipt-embed-lbl">Paid out on Kasi Markets</div>
+            <div class="cin-receipt-embed-amt">+ R 175.44</div>
+          </div>
+          <div style="margin-left:auto;padding:6px 14px;background:#dcfce7;color:#16a34a;border-radius:100px;font-size:11px;font-weight:700;">YES &middot; resolved</div>
+        </div>
+        <div class="cin-receipt-foot"><span>&#128172; 1.8k</span><span>&#128257; 4.4k</span><span>&#10084;&#65039; 12.2k</span></div>
       </div>
-      <div class="cin-h" style="font-size:32px;margin-top:24px;">Your opinion.<br/>Your money. Your receipts.</div>
-      <a href="kasi_markets.html" class="cin-cta-btn" style="margin-top:24px;">
+      <a href="kasi_markets.html" class="cin-cta-btn" id="cinCta">
         Start trading now
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
   </div>
 
+  <div class="cin-hint" id="cinHint">Click anywhere to continue <span class="arw">&rarr;</span></div>
   <button class="cin-skip" id="cinSkip">Skip intro &rarr;</button>
 </div>
 
@@ -703,50 +799,84 @@ button{cursor:pointer;font-family:inherit;}
 (function(){
   /* ── Particles ── */
   const dots=document.getElementById('cinDots');
-  for(let i=0;i<30;i++){
+  for(let i=0;i<34;i++){
     const d=document.createElement('div');
     d.className='cin-dot';
     const sz=2+Math.random()*5;
-    d.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${50+Math.random()*50}%;background:${Math.random()>.4?'#16a34a':'#bbf7d0'};animation:${Math.random()>.5?'dotUp':'dotDrift'} ${3+Math.random()*4}s ${Math.random()*5}s ease-out infinite;`;
+    const col=Math.random();
+    const c=col<.35?'#1d9bf0':(col<.7?'#16a34a':'#bbf7d0');
+    d.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${50+Math.random()*50}%;background:${c};animation:${Math.random()>.5?'dotUp':'dotDrift'} ${4+Math.random()*5}s ${Math.random()*5}s ease-out infinite;`;
     dots.appendChild(d);
   }
 
   /* ── Engine ── */
   const cin=document.getElementById('cin');
-  const bar=document.getElementById('cinBar');
+  const progDots=document.querySelectorAll('#cinProg .cin-prog-dot');
+  const hint=document.getElementById('cinHint');
+  const slides=document.querySelectorAll('.cin-s');
   const totalSlides=5;
-  const durations=[2300,2500,3000,3500,3500];
-  let cur=0,tmr;
+  let cur=0,transitioning=false;
+  let priceIv=null;
 
-  function show(n){
-    // exit old
-    document.querySelectorAll('.cin-s').forEach(s=>{s.classList.remove('enter');s.classList.add('exit');});
-    setTimeout(()=>{
-      document.querySelectorAll('.cin-s').forEach(s=>s.classList.remove('exit'));
-      const sl=document.getElementById('cs'+n);
-      if(sl) sl.classList.add('enter');
-      bar.style.width=((n+1)/totalSlides*100)+'%';
+  function updateProg(n){
+    progDots.forEach((d,i)=>{
+      d.classList.remove('active','done');
+      if(i<n) d.classList.add('done');
+      if(i===n) d.classList.add('active');
+    });
+  }
 
-      // ── Per-slide animations ──
-      if(n===0){
-        const logo=document.getElementById('cinLogo');
-        logo.classList.add('pulse');
-        setTimeout(()=>document.getElementById('cinBrand').classList.add('show'),600);
-        setTimeout(()=>document.getElementById('cinTag').classList.add('show'),900);
-      }
-      if(n===1){
-        document.querySelectorAll('#cinTags .cin-tag').forEach((t,i)=>{
-          setTimeout(()=>t.classList.add('pop'),150+i*100);
-        });
-      }
-      if(n===2){
-        // Price tick animation
-        let prices=[57,58,59,58,60,59,61];
-        let idx=0;
-        const yb=document.getElementById('cinYes');
-        const nb=document.getElementById('cinNo');
-        const iv=setInterval(()=>{
-          if(idx>=prices.length){clearInterval(iv);return;}
+  function resetSlideInternals(n){
+    // Reset micro-animations for the slide we're about to show so they can replay cleanly
+    if(n===0){
+      document.getElementById('cinLogo').classList.remove('pulse');
+      document.getElementById('cinBrand').classList.remove('show');
+      document.getElementById('cinTag').classList.remove('show');
+    }
+    if(n===1){
+      document.querySelectorAll('#cinFeed .cin-tweet').forEach(t=>t.classList.remove('in'));
+    }
+    if(n===2){
+      document.getElementById('cinMorphTweet').classList.remove('morph');
+      document.getElementById('cinMorphMarket').classList.remove('morph');
+      if(priceIv){clearInterval(priceIv);priceIv=null;}
+      document.getElementById('cinYes').textContent='Yes 57\u00a2';
+      document.getElementById('cinNo').textContent='No 43\u00a2';
+    }
+    if(n===3){
+      document.querySelectorAll('#cinFlow [data-d]').forEach(el=>el.classList.remove('show'));
+    }
+    if(n===4){
+      document.getElementById('cinReceipt').classList.remove('show');
+      document.getElementById('cinCta').classList.remove('show');
+    }
+  }
+
+  function runSlideAnims(n){
+    if(n===0){
+      const logo=document.getElementById('cinLogo');
+      void logo.offsetWidth;
+      logo.classList.add('pulse');
+      setTimeout(()=>document.getElementById('cinBrand').classList.add('show'),500);
+      setTimeout(()=>document.getElementById('cinTag').classList.add('show'),800);
+    }
+    if(n===1){
+      document.querySelectorAll('#cinFeed .cin-tweet').forEach((t,i)=>{
+        setTimeout(()=>t.classList.add('in'),120+i*200);
+      });
+    }
+    if(n===2){
+      const mt=document.getElementById('cinMorphTweet');
+      const mm=document.getElementById('cinMorphMarket');
+      setTimeout(()=>{mt.classList.add('morph');mm.classList.add('morph');},750);
+
+      let prices=[57,58,59,58,60,59,61];
+      let idx=0;
+      const yb=document.getElementById('cinYes');
+      const nb=document.getElementById('cinNo');
+      setTimeout(()=>{
+        priceIv=setInterval(()=>{
+          if(idx>=prices.length){clearInterval(priceIv);priceIv=null;return;}
           const p=prices[idx];
           yb.textContent='Yes '+p+'\u00a2';
           nb.textContent='No '+(100-p)+'\u00a2';
@@ -754,42 +884,105 @@ button{cursor:pointer;font-family:inherit;}
           void yb.offsetWidth;
           yb.classList.add('tick');nb.classList.add('tick');
           idx++;
-        },350);
+        },380);
+      },1700);
+    }
+    if(n===3){
+      document.querySelectorAll('#cinFlow [data-d]').forEach(el=>{
+        const d=parseInt(el.dataset.d);
+        setTimeout(()=>el.classList.add('show'),150+d*180);
+      });
+    }
+    if(n===4){
+      setTimeout(()=>document.getElementById('cinReceipt').classList.add('show'),200);
+      setTimeout(()=>document.getElementById('cinCta').classList.add('show'),800);
+    }
+  }
+
+  function show(n){
+    // Cross-fade: no mid-state snap, no class swap flash.
+    // Old active slide: keeps its transition, just moves to base (not-active) state via .leaving.
+    // New slide: gets .active with a small delay so old finishes fading first.
+    transitioning=true;
+
+    // Reset internals of the incoming slide BEFORE it becomes visible
+    resetSlideInternals(n);
+
+    slides.forEach(s=>{
+      if(s.classList.contains('active')){
+        s.classList.remove('active');
+        s.classList.add('leaving');
       }
-      if(n===3){
-        // Stagger flow steps
-        document.querySelectorAll('#cinFlow [data-d]').forEach(el=>{
-          const d=parseInt(el.dataset.d);
-          setTimeout(()=>el.classList.add('show'),200+d*180);
-        });
-        // Platform pills pop
-        document.querySelectorAll('#cinPlats .cin-tag').forEach((t,i)=>{
-          setTimeout(()=>t.classList.add('pop'),1200+i*120);
-        });
-      }
-      if(n===4){
-        setTimeout(()=>document.getElementById('cinCheck').classList.add('pop'),200);
-        setTimeout(()=>document.getElementById('cinAmt').classList.add('show'),400);
-        setTimeout(()=>document.getElementById('cinPayL').classList.add('show'),600);
-      }
-    },180);
+    });
+
+    // Activate new slide on next frame so the browser commits the leaving state first
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        const sl=document.getElementById('cs'+n);
+        if(sl){
+          sl.classList.remove('leaving');
+          sl.classList.add('active');
+        }
+        updateProg(n);
+      });
+    });
+
+    // Clear .leaving after cross-fade completes to keep DOM clean
+    setTimeout(()=>{
+      slides.forEach(s=>{if(!s.classList.contains('active'))s.classList.remove('leaving');});
+      transitioning=false;
+    },900);
+
+    // Hide hint on last slide
+    if(n===totalSlides-1){ hint.style.opacity='0'; } else { hint.style.opacity=''; }
+
+    // Kick off the new slide's internal animations once it starts fading in
+    setTimeout(()=>runSlideAnims(n),180);
   }
 
   function advance(){
-    if(cur>=totalSlides-1){tmr=setTimeout(close,durations[cur]);return;}
-    tmr=setTimeout(()=>{cur++;show(cur);advance();},durations[cur]);
+    if(transitioning) return;
+    if(cur>=totalSlides-1){ close(); return; }
+    cur++; show(cur);
   }
 
   function close(){
     cin.classList.add('done');
     document.body.style.overflow='';
-    setTimeout(()=>cin.remove(),1000);
+    setTimeout(()=>cin.remove(),1100);
   }
 
+  // ── Click-through mechanic ──
   document.body.style.overflow='hidden';
-  show(0);advance();
 
-  document.getElementById('cinSkip').addEventListener('click',()=>{clearTimeout(tmr);close();});
+  // First slide: bootstrap directly without leaving/cross-fade machinery
+  (function bootstrap(){
+    const first=document.getElementById('cs0');
+    resetSlideInternals(0);
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        first.classList.add('active');
+        updateProg(0);
+      });
+    });
+    setTimeout(()=>runSlideAnims(0),180);
+  })();
+
+  cin.addEventListener('click',function(e){
+    // Don't advance if user clicked the CTA or skip button
+    if(e.target.closest('.cin-cta-btn')) return;
+    if(e.target.closest('.cin-skip')) return;
+    advance();
+  });
+
+  // Keyboard: space / arrow right advances, esc closes
+  document.addEventListener('keydown',function(e){
+    if(cin.classList.contains('done')) return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='Enter'){ e.preventDefault(); advance(); }
+    if(e.key==='Escape'){ close(); }
+  });
+
+  document.getElementById('cinSkip').addEventListener('click',function(e){e.stopPropagation();close();});
 })();
 
 /* ── Main page scripts ── */
